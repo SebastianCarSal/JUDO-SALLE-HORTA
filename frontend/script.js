@@ -26,36 +26,36 @@ function recuperacionDatos(){
 }
 
 //Barra con logo y botón de menú en la parte superior
-function Navbar() {
-  const [menuAbierto, setMenuAbierto] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto);
-  };
-
-  return (
-    <nav className="navbar">
-      <div className="logo">
-        <img src="./media/logo-judo.png" alt="Club de Judo" />
-      </div>
-      <button className="menu-button" onClick={toggleMenu}>
-        ☰
-      </button>
-      {menuAbierto && (
-        <div className="menu">
-          <button className="close-button" onClick={toggleMenu}>✖</button>
-          <ul>
-            <li><a href="#inicio" onClick={() => setMenuAbierto(false)}>Inicio</a></li>
-            <li><a href="#noticias" onClick={() => setMenuAbierto(false)}>Noticias</a></li>
-            <li><a href="#merch" onClick={() => setMenuAbierto(false)}>Merch</a></li>
-            <li><a href="#competidores" onClick={() => setMenuAbierto(false)}>Competidores</a></li>
-            <li><a href="#nosotros" onClick={() => setMenuAbierto(false)}>Sobre Nosotros</a></li>
-          </ul>
+function Navbar({ setPaginaActual }) {
+    const [menuAbierto, setMenuAbierto] = useState(false);
+  
+    const toggleMenu = () => {
+      setMenuAbierto(!menuAbierto);
+    };
+  
+    return (
+      <nav className="navbar">
+        <div className="logo">
+          <img src="./media/logo-judo.png" alt="Club de Judo" />
         </div>
-      )}
-    </nav>
-  );
-}
+        <button className="menu-button" onClick={toggleMenu}>
+          ☰
+        </button>
+        {menuAbierto && (
+          <div className="menu">
+            <button className="close-button" onClick={toggleMenu}>✖</button>
+            <ul>
+              <li><a href="#inicio" onClick={() => { setPaginaActual("inicio"); setMenuAbierto(false); }}>Inicio</a></li>
+              <li><a href="#noticias" onClick={() => { setPaginaActual("noticias"); setMenuAbierto(false); }}>Noticias</a></li>
+              <li><a href="#merch" onClick={() => { setPaginaActual("merch"); setMenuAbierto(false); }}>Merch</a></li>
+              <li><a href="#competidores" onClick={() => { setPaginaActual("competidores"); setMenuAbierto(false); }}>Competidores</a></li>
+              <li><a href="#nosotros" onClick={() => { setPaginaActual("nosotros"); setMenuAbierto(false); }}>Sobre Nosotros</a></li>
+            </ul>
+          </div>
+        )}
+      </nav>
+    );
+  }
   
 //carrusel de imagenes
 function Carrusel () {
@@ -273,16 +273,40 @@ function UltimasNoticias () {
 
   //Componente principal de la aplicación
   function App() {
-      return (
-          <div className="App">
-              <Navbar />
+    const [paginaActual, setPaginaActual] = useState("inicio");
+  
+    const renderizarContenido = () => {
+      switch (paginaActual) {
+        case "inicio":
+          return (
+            <>
               <Carrusel />
-              <UltimasNoticias/>
-              <SobreNosotros/>
-              <Competidores/>
-              <ContactoClub/>
-          </div>
-      );
+              <UltimasNoticias />
+              <SobreNosotros />
+              <Competidores />
+              <ContactoClub />
+            </>
+          );
+        case "noticias":
+          return <UltimasNoticias />;
+        case "merch":
+          return <h1>Merchandising</h1>;
+        case "competidores":
+          return <Competidores />;
+        case "nosotros":
+          return <SobreNosotros />;
+        default:
+          return <h1>Página no encontrada</h1>;
+      }
+    };
+  
+    return (
+      <div>
+        <Navbar setPaginaActual={setPaginaActual} />
+        <div>{renderizarContenido()}</div>
+        <Footer />
+      </div>
+    );
   }
   
   const app = document.getElementById('app');

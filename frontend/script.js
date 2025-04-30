@@ -1,4 +1,3 @@
-
 const { useState, useEffect } = React;
 
 //recuperacion de datos ejemplo
@@ -26,7 +25,6 @@ function recuperacionDatos(){
     })
 }
 
-
 //Barra con logo y botón de menú en la parte superior
 function Navbar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -45,12 +43,13 @@ function Navbar() {
       </button>
       {menuAbierto && (
         <div className="menu">
+          <button className="close-button" onClick={toggleMenu}>✖</button>
           <ul>
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#noticias">Últimas Noticias</a></li>
-            <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
-            <li><a href="#competidores">Competidores</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#inicio" onClick={() => setMenuAbierto(false)}>Inicio</a></li>
+            <li><a href="#noticias" onClick={() => setMenuAbierto(false)}>Noticias</a></li>
+            <li><a href="#merch" onClick={() => setMenuAbierto(false)}>Merch</a></li>
+            <li><a href="#competidores" onClick={() => setMenuAbierto(false)}>Competidores</a></li>
+            <li><a href="#nosotros" onClick={() => setMenuAbierto(false)}>Sobre Nosotros</a></li>
           </ul>
         </div>
       )}
@@ -131,7 +130,7 @@ function UltimasNoticias () {
   )
 }
 
-  //componente apartado SObre nosotros
+  //componente apartado Sobre nosotros
   function SobreNosotros(){
     return(
     <div className = "sobre-nosotros">

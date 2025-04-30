@@ -6,7 +6,6 @@ function recuperacionDatos(){
   const [judokas, setJudokas] = useState([]);
 
     useEffect(() => {
-      // Llamada a la API para obtener los datos
       fetch('http://localhost:3000/judokas') 
         .then((response) => {
           if (!response.ok) {
@@ -29,18 +28,35 @@ function recuperacionDatos(){
 
 
 //Barra con logo y botón de menú en la parte superior
-function Navbar () {
-    return (
-      <nav className="navbar">
-        <div className="logo">
-          <img src="./media/logo-judo.png" alt="Club de Judo" />
-        </div>
-        <button className="menu-button">
-          ☰
-        </button>
-      </nav>
-    );
+function Navbar() {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuAbierto(!menuAbierto);
   };
+
+  return (
+    <nav className="navbar">
+      <div className="logo">
+        <img src="./media/logo-judo.png" alt="Club de Judo" />
+      </div>
+      <button className="menu-button" onClick={toggleMenu}>
+        ☰
+      </button>
+      {menuAbierto && (
+        <div className="menu">
+          <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#noticias">Últimas Noticias</a></li>
+            <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+            <li><a href="#competidores">Competidores</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </div>
+      )}
+    </nav>
+  );
+}
   
 //carrusel de imagenes
 function Carrusel () {

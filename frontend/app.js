@@ -167,9 +167,9 @@ function UltimasNoticias () {
   function Competidores(){
     
     const competidores = [
-      {peso: "-90kg", nombrePeso: " Peso Semipesado", imagenCompetidor: "./media/competidor1.png", nombreCompetidor: "EdgarI", alias: "Peluchito", nombre: "Edgar", apellido1: "Iglesias", apellido2: "García", nacionalidad: "Esp"},
-      {peso: "-66kg", nombrePeso: "Peso Ligero", imagenCompetidor: "./media/competidor2.png", nombreCompetidor: "AdrianM", alias: "Mora", nombre: "Adrián", apellido1: "Moratalla", apellido2: "APelicano", nacionalidad: "Esp"},
-      {peso: "-73kg", nombrePeso: "Peso Semimedio", imagenCompetidor: "./media/competidor3.png", nombreCompetidor: "AlbertoG", alias: "Bicho", nombre: "Alberto", apellido1: "García", apellido2: "Lozano", nacionalidad: "Esp"}
+      {peso: "-90kg", nombrePeso: " Peso Semipesado", imagenCompetidor: "./media/comp1.png", nombreCompetidor: "EdgarI", alias: "Peluchito", nombre: "Edgar", apellido1: "Iglesias", apellido2: "García", nacionalidad: "Esp"},
+      {peso: "-66kg", nombrePeso: "Peso Ligero", imagenCompetidor: "./media/comp2.png", nombreCompetidor: "AdrianM", alias: "Mora", nombre: "Adrián", apellido1: "Moratalla", apellido2: "APelicano", nacionalidad: "Esp"},
+      {peso: "-73kg", nombrePeso: "Peso Semimedio", imagenCompetidor: "./media/comp3.png", nombreCompetidor: "AlbertoG", alias: "Bicho", nombre: "Alberto", apellido1: "García", apellido2: "Lozano", nacionalidad: "Esp"}
     ];
 
     function CartasCompetidores({peso, nombrePeso, imagenCompetidor, nombreCompetidor, alias, nombre, apellido1, apellido2, nacionalidad}) {
@@ -394,7 +394,6 @@ function UltimasNoticias () {
       </footer>
     );
   }
-  
 
   //Componente principal de la aplicación
   function App() {
@@ -433,8 +432,6 @@ function UltimasNoticias () {
       </div>
     );
   }
-
-
   
   const app = document.getElementById('app');
   const root = ReactDOM.createRoot(app);

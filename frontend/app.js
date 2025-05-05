@@ -25,37 +25,34 @@ function recuperacionDatos(){
     })
 }
 
-//Barra con logo y botón de menú en la parte superior
 function Navbar({ setPaginaActual }) {
-    const [menuAbierto, setMenuAbierto] = useState(false);
-  
-    const toggleMenu = () => {
-      setMenuAbierto(!menuAbierto);
-    };
-  
-    return (
-      <nav className="navbar">
-        <div className="logo">
-          <img src="./media/logo-judo.png" alt="Club de Judo" />
-        </div>
-        <button className="menu-button" onClick={toggleMenu}>
-          ☰
-        </button>
-        {menuAbierto && (
-          <div className="menu">
-            <button className="close-button" onClick={toggleMenu}>✖</button>
-            <ul>
-              <li><a href="#inicio" onClick={() => { setPaginaActual("inicio"); setMenuAbierto(false); }}>Inicio</a></li>
-              <li><a href="#noticias" onClick={() => { setPaginaActual("noticias"); setMenuAbierto(false); }}>Noticias</a></li>
-              <li><a href="#merch" onClick={() => { setPaginaActual("merch"); setMenuAbierto(false); }}>Merch</a></li>
-              <li><a href="#competidores" onClick={() => { setPaginaActual("competidores"); setMenuAbierto(false); }}>Competidores</a></li>
-              <li><a href="#nosotros" onClick={() => { setPaginaActual("nosotros"); setMenuAbierto(false); }}>Sobre Nosotros</a></li>
-            </ul>
-          </div>
-        )}
-      </nav>
-    );
-  }
+  const [menuAbierto, setMenuAbierto] = useState(false); 
+
+  const toggleMenu = () => {
+    setMenuAbierto(!menuAbierto); 
+  };
+
+  return (
+    <nav className="navbar">
+      <div className="logo">
+        <img src="./media/logo-judo.png" alt="Club de Judo" />
+      </div>
+      <button className="menu-button" onClick={toggleMenu}>
+        ☰
+      </button>
+      <div className={`menu ${menuAbierto ? "menu-abierto" : ""}`}>
+        <button className="close-button" onClick={toggleMenu}>✖</button>
+        <ul>
+          <li><a href="#inicio" onClick={() => { setPaginaActual("inicio"); setMenuAbierto(false); }}>Inicio</a></li>
+          <li><a href="#noticias" onClick={() => { setPaginaActual("noticias"); setMenuAbierto(false); }}>Noticias</a></li>
+          <li><a href="#merch" onClick={() => { setPaginaActual("merch"); setMenuAbierto(false); }}>Merch</a></li>
+          <li><a href="#competidores" onClick={() => { setPaginaActual("competidores"); setMenuAbierto(false); }}>Competidores</a></li>
+          <li><a href="#nosotros" onClick={() => { setPaginaActual("nosotros"); setMenuAbierto(false); }}>Sobre Nosotros</a></li>
+        </ul>
+      </div>
+    </nav>
+  );
+}
   
 //carrusel de imagenes
 function Carrusel () {
@@ -289,7 +286,10 @@ function UltimasNoticias () {
         case "merch": 
           return <h1>Merchandising</h1>;
         case "competidores":
-          return <Competidores />;
+          return (
+          <Competidores />
+          )
+           
         case "nosotros":
           return <SobreNosotros />;
         default:

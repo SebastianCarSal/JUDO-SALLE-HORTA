@@ -1,15 +1,18 @@
 require('dotenv').config();
 
 const { initializeApp, applicationDefault } = require('firebase-admin/app');
-const {getFirestore} = require('firebase-admin/firestore');
+const { getFirestore } = require('firebase-admin/firestore');
+const { getStorage } = require('firebase-admin/storage'); 
 
 initializeApp({
   credential: applicationDefault(),
- 
-})
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET, 
+});
 
 const db = getFirestore();
-console.log(db);
+const bucket = getStorage().bucket(process.env.FIREBASE_STORAGE_BUCKET); 
+
 module.exports = {
-    db,
+  db,
+  bucket, 
 };

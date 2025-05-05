@@ -161,23 +161,38 @@ function UltimasNoticias () {
   }
 
   //Componente competidores
-  function Competidores(){
-    
-    const competidores = [
-      {peso: "-90kg", nombrePeso: " Peso Semipesado", imagenCompetidor: "./media/comp1.png", nombreCompetidor: "EdgarI", alias: "Peluchito", nombre: "Edgar", apellido1: "Iglesias", apellido2: "García", nacionalidad: "Esp"},
-      {peso: "-66kg", nombrePeso: "Peso Ligero", imagenCompetidor: "./media/comp2.png", nombreCompetidor: "AdrianM", alias: "Mora", nombre: "Adrián", apellido1: "Moratalla", apellido2: "APelicano", nacionalidad: "Esp"},
-      {peso: "-73kg", nombrePeso: "Peso Semimedio", imagenCompetidor: "./media/comp3.png", nombreCompetidor: "AlbertoG", alias: "Bicho", nombre: "Alberto", apellido1: "García", apellido2: "Lozano", nacionalidad: "Esp"}
-    ];
-
-    function CartasCompetidores({peso, nombrePeso, imagenCompetidor, nombreCompetidor, alias, nombre, apellido1, apellido2, nacionalidad}) {
-      return(
+  function Competidores({ modo }) {
+    const [competidores, setCompetidores] = useState([]); // Estado para almacenar los competidores
+  
+    useEffect(() => {
+      // Recuperar datos desde el backend
+      fetch('http://localhost:3000/judokas') // Cambia la URL según tu backend
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setCompetidores(data); 
+        })
+        .catch((error) => {
+          console.error('Error al obtener los datos del backend:', error);
+        });
+    }, []); 
+  
+    // Filtrar competidores según el modo
+    const competidoresAMostrar = modo === "inicio" ? competidores.slice(0, 3) : competidores;
+  
+    function CartasCompetidores({ peso, nombrePeso, url, alias, nombre, apellido1, apellido2, nacionalidad }) {
+      return (
         <div className="carta-competidor">
           <div className="peso">
             <h2>{peso}</h2>
             <h4>{nombrePeso}</h4>
           </div>
           <div className="imagen-competidor">
-            <img src={imagenCompetidor} alt={nombreCompetidor} />
+            <img src={url} alt={alias} /> 
           </div>
           <div className="info-competidor">
             <h2>"{alias}"</h2>
@@ -185,51 +200,28 @@ function UltimasNoticias () {
             <h3>{apellido2}</h3>
             <p>{nacionalidad}</p>
           </div>
-          <div className="boton-ver-perfil-completo">
-            <button className="boton-ver-perfil" src="./media/btn-leerNoticiaEntera.png"></button>
-          </div>
         </div>
       );
     }
-
-    return(
+  
+    return (
       <div className="competidores">
-          <h1 className="titulo-competidores">COMPETIDORES</h1>
-          <div className="cartas-competidores">
+        <h1 className="titulo-competidores">COMPETIDORES</h1>
+        <div className="cartas-competidores">
+          {competidoresAMostrar.map((competidor, index) => (
             <CartasCompetidores
-              peso={competidores[0].peso} 
-              nombrePeso={competidores[0].nombrePeso}
-              imagenCompetidor={competidores[0].imagenCompetidor}
-              nombreCompetidor={competidores[0].nombreCompetidor}
-              alias={competidores[0].alias}
-              nombre={competidores[0].nombre}
-              apellido1={competidores[0].apellido1}
-              apellido2={competidores[0].apellido2}
-              nacionalidad={competidores[0].nacionalidad}
+              key={index}
+              peso={competidor.peso}
+              nombrePeso={competidor.nombrePeso}
+              url={competidor.url} // Pasa el campo `url` al componente
+              alias={competidor.alias}
+              nombre={competidor.nombre}
+              apellido1={competidor.apellido1}
+              apellido2={competidor.apellido2}
+              nacionalidad={competidor.nacionalidad}
             />
-            <CartasCompetidores
-              peso={competidores[1].peso} 
-              nombrePeso={competidores[1].nombrePeso}
-              imagenCompetidor={competidores[1].imagenCompetidor}
-              nombreCompetidor={competidores[1].nombreCompetidor}
-              alias={competidores[1].alias}
-              nombre={competidores[1].nombre}
-              apellido1={competidores[1].apellido1}
-              apellido2={competidores[1].apellido2}
-              nacionalidad={competidores[1].nacionalidad}              
-            />
-            <CartasCompetidores
-              peso={competidores[2].peso} 
-              nombrePeso={competidores[2].nombrePeso}
-              imagenCompetidor={competidores[2].imagenCompetidor}
-              nombreCompetidor={competidores[2].nombreCompetidor}
-              alias={competidores[2].alias}
-              nombre={competidores[2].nombre}
-              apellido1={competidores[2].apellido1}
-              apellido2={competidores[2].apellido2}
-              nacionalidad={competidores[2].nacionalidad}              
-            />
-          </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -298,20 +290,17 @@ function UltimasNoticias () {
               <Carrusel />
               <UltimasNoticias />
               <SobreNosotros />
-              <Competidores />
+              <Competidores modo="inicio" /> 
               <ContactoClub />
               <Footer />
             </>
           );
+        case "competidores":
+          return <Competidores modo="competidores" />; 
         case "noticias":
           return <UltimasNoticias />;
-        case "merch": 
+        case "merch":
           return <h1>Merchandising</h1>;
-        case "competidores":
-          return (
-          <Competidores />
-          )
-           
         case "nosotros":
           return <SobreNosotros />;
         default:
@@ -323,11 +312,9 @@ function UltimasNoticias () {
       <div>
         <Navbar setPaginaActual={setPaginaActual} />
         <div>{renderizarContenido()}</div>
-  
       </div>
     );
   }
-  
   const app = document.getElementById('app');
   const root = ReactDOM.createRoot(app);
   root.render(<App />);

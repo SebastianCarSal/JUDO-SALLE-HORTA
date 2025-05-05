@@ -128,13 +128,13 @@
   
   .contenedor-imagen {
     width: 100%;
-    height: 100vh; /* también aquí */
+    height: 100vh; 
     overflow: hidden;
   }
   
   .imagen-carrusel {
     width: 100%;
-    height: 100vh; /* cambiamos auto por 100vh */
+    height: 100vh; 
     object-fit: cover;
     transition: all 0.5s ease;
   }

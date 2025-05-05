@@ -184,42 +184,26 @@ function UltimasNoticias () {
     // Filtrar competidores según el modo
     const competidoresAMostrar = modo === "inicio" ? competidores.slice(0, 3) : competidores;
   
-    function CartasCompetidores({ peso, nombrePeso, url, alias, nombre, apellido1, apellido2, nacionalidad }) {
-      return (
-        <div className="carta-competidor">
-          <div className="peso">
-            <h2>{peso}</h2>
-            <h4>{nombrePeso}</h4>
-          </div>
-          <div className="imagen-competidor">
-            <img src={url} alt={alias} /> 
-          </div>
-          <div className="info-competidor">
-            <h2>"{alias}"</h2>
-            <h1>{nombre} {apellido1}</h1>
-            <h3>{apellido2}</h3>
-            <p>{nacionalidad}</p>
-          </div>
-        </div>
-      );
-    }
-  
     return (
-      <div className="competidores">
+      <div className={`competidores ${modo === "competidores" ? "padding-top" : ""}`}>
         <h1 className="titulo-competidores">COMPETIDORES</h1>
         <div className="cartas-competidores">
           {competidoresAMostrar.map((competidor, index) => (
-            <CartasCompetidores
-              key={index}
-              peso={competidor.peso}
-              nombrePeso={competidor.nombrePeso}
-              url={competidor.url} // Pasa el campo `url` al componente
-              alias={competidor.alias}
-              nombre={competidor.nombre}
-              apellido1={competidor.apellido1}
-              apellido2={competidor.apellido2}
-              nacionalidad={competidor.nacionalidad}
-            />
+            <div key={index} className="carta-competidor">
+              <div className="peso">
+                <h2>{competidor.peso}</h2>
+                <h4>{competidor.nombrePeso}</h4>
+              </div>
+              <div className="imagen-competidor">
+                <img src={competidor.url} alt={competidor.alias} />
+              </div>
+              <div className="info-competidor">
+                <h2>"{competidor.alias}"</h2>
+                <h1>{competidor.nombre} {competidor.apellido1}</h1>
+                <h3>{competidor.apellido2}</h3>
+                <p>{competidor.nacionalidad}</p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -296,7 +280,12 @@ function UltimasNoticias () {
             </>
           );
         case "competidores":
-          return <Competidores modo="competidores" />; 
+          return (
+            <>
+              <Competidores modo="competidores" />
+              <Footer />
+            </>
+          );
         case "noticias":
           return <UltimasNoticias />;
         case "merch":

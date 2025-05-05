@@ -28,11 +28,12 @@
       box-sizing: border-box;
     }
   
+
   
   /*NAVBAR ESTILO*/
   .navbar {
     
-    position: absolute; 
+    position: fixed; 
     left: 0;
     right: 0;
     display: flex;
@@ -91,7 +92,7 @@
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
-    color: #003366;
+    color: #a32330;
   }
   
   /* Estilo de los enlaces del menú */
@@ -108,14 +109,14 @@
   
   .menu a {
     text-decoration: none;
-    color: #003366; 
+    color: #a32330; 
     font-size: 36px;
     font-weight: bold;
     font-family: 'Archivo Black', sans-serif;
   }
   
   .menu a:hover {
-    color: #00509e; 
+    color: #4b0e14; 
   }
 
   /*CARRUSEL ESTILO*/
@@ -365,8 +366,13 @@
     /*COMPETIDORES ESTILO*/
     /* CONTENEDOR GENERAL */
   .competidores {
+
+    margin: 40px 0; 
     
-    margin: 40px 0;
+  }
+  .competidores.padding-top {
+    padding-top: 80px; 
+    margin: 0 auto;
   }
   
   /* TÍTULO */

@@ -28,11 +28,12 @@
       box-sizing: border-box;
     }
   
+
   
   /*NAVBAR ESTILO*/
   .navbar {
     
-    position: absolute; 
+    position: fixed; 
     left: 0;
     right: 0;
     display: flex;
@@ -118,7 +119,9 @@
     display: block;
     width: 100%; /* ocupa todo el ancho disponible */
     text-decoration: none;
-    color: #a32330;
+    color: #003366; 
+    font-size: 36px;
+    font-weight: bold;
     font-family: 'Archivo Black', sans-serif;
     text-transform: uppercase;
     font-size: 60px;
@@ -128,9 +131,7 @@
   }
   
   .menu a:hover {
-    color: transparent; /* relleno transparente */
-    -webkit-text-stroke: 5px #a32330; /* contorno granate */
-    text-stroke: 1px #a32330; /* por compatibilidad */
+    color: #00509e; 
   }
   
   /*CARRUSEL ESTILO*/
@@ -380,8 +381,13 @@
     /*COMPETIDORES ESTILO*/
     /* CONTENEDOR GENERAL */
   .competidores {
+
+    margin: 40px 0; 
     
-    margin: 40px 0;
+  }
+  .competidores.padding-top {
+    padding-top: 80px; 
+    margin: 0 auto;
   }
   
   /* TÍTULO */

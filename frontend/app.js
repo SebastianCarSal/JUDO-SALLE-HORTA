@@ -56,7 +56,7 @@ function Navbar({ setPaginaActual }) {
   
 //carrusel de imagenes
 function Carrusel () {
-  const imagenes = ["media/fonseca.jpg","media/ono.jpg", "media/rinner.jpg"];
+  const imagenes = ["media/carr1.jpg","media/ono.jpg", "media/rinner.jpg"];
 
   const [actual, setActual] = useState(0);
 
@@ -259,11 +259,32 @@ function UltimasNoticias () {
   }
 
   //Componente Footer
-  // function Footer() {
-  //   return (
-      
-  //   );
-  // }
+
+  function Footer() {
+    return (
+      <div>
+        <footer className="footer-distributed">
+        <div className="footer-right">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <img src="media/instagram.png" alt="Instagram" className="social-icon" />
+          </a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
+            <img src="media/tiktok.png" alt="TikTok" className="social-icon" />
+          </a>
+        </div>
+  
+          <div className="footer-left">
+            <p className="footer-links">
+              <a href="#">Página creada por Sebastian Manuel Carpintero y Ethan Seisdedos Garcia</a>
+            </p>
+  
+            <p>Judo Nou Barcelona &copy; 2025 Todos los derechos reservados</p>
+          </div>
+        </footer>
+      </div>
+    );
+  };
+  
 
   //Componente principal de la aplicación
   function App() {
@@ -279,6 +300,7 @@ function UltimasNoticias () {
               <SobreNosotros />
               <Competidores />
               <ContactoClub />
+              <Footer />
             </>
           );
         case "noticias":

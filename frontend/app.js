@@ -26,10 +26,10 @@
 // }
 
 function Navbar({ setPaginaActual }) {
-  const [menuAbierto, setMenuAbierto] = useState(false); 
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto); 
+    setMenuAbierto(!menuAbierto);
   };
 
   return (
@@ -38,7 +38,7 @@ function Navbar({ setPaginaActual }) {
         <img src="./media/logo-menu.jpg" alt="Club de Judo" />
       </div>
       <button className="menu-button" onClick={toggleMenu}>
-        ☰
+        <img src="./media/menu.svg" alt="Menu" className="menu-icon" />
       </button>
       <div className={`menu ${menuAbierto ? "menu-abierto" : ""}`}>
         <button className="close-button" onClick={toggleMenu}>✖</button>
@@ -237,6 +237,44 @@ function UltimasNoticias () {
     );
   }
 
+  //Componente tienda
+  function Tienda(){
+
+    function Producto() {
+      return (
+        <div className="producto">
+          <img src="./media/judogui_ejemplo.png" className="imagen-producto" />
+        </div>
+      );
+    }
+
+    return(
+      <div className="tienda">
+        <div className="filtros-tienda">
+          <ul>
+            <li><a href="#">TODO</a></li>
+            <li><a href="#">JUDOGIS</a></li>
+            <li><a href="#">CINTURONES</a></li>
+            <li><a href="#">CHANDAL</a></li>
+            <li><a href="#">CAMISETAS</a></li>
+          </ul>
+        </div>
+        <div className="productos-tienda">
+          <Producto/>
+          <Producto/> 
+          <Producto/>
+          <Producto/>
+          <Producto/>
+          <Producto/>
+          <Producto/>
+          <Producto/>
+          <Producto/>
+          <Producto/>
+        </div>
+      </div>
+    );
+  }
+
   //Componente Footer
 
   function Footer() {
@@ -290,7 +328,13 @@ function UltimasNoticias () {
         case "noticias":
           return <UltimasNoticias />;
         case "merch":
-          return <h1>Merchandising</h1>;
+          return(
+            <>
+            <h1>Merchandising</h1>
+            <Tienda/>
+            </>
+          ) ;
+          
         case "nosotros":
           return <SobreNosotros />;
         default:

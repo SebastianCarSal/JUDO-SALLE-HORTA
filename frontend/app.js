@@ -162,11 +162,11 @@ function UltimasNoticias () {
 
   //Componente competidores
   function Competidores({ modo }) {
-    const [competidores, setCompetidores] = useState([]); // Estado para almacenar los competidores
+    const [competidores, setCompetidores] = useState([]); 
   
     useEffect(() => {
       // Recuperar datos desde el backend
-      fetch('http://localhost:3000/judokas') // Cambia la URL según tu backend
+      fetch('http://localhost:3000/judokas') 
         .then((response) => {
           if (!response.ok) {
             throw new Error('Error al obtener los datos');

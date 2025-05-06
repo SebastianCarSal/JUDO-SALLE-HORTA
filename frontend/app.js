@@ -279,7 +279,12 @@ function UltimasNoticias () {
             </>
           );
         case "competidores":
-          return <Competidores modo="competidores" />; 
+          return (
+            <>
+              <Competidores modo="competidores" />
+              <Footer />
+            </>
+          );
         case "noticias":
           return <UltimasNoticias />;
         case "merch":

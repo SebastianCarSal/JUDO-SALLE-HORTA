@@ -1,29 +1,29 @@
   const { useState, useEffect } = React;
 
 //recuperacion de datos ejemplo
-function recuperacionDatos(){
-  const [judokas, setJudokas] = useState([]);
+// function recuperacionDatos(){
+//   const [judokas, setJudokas] = useState([]);
 
-    useEffect(() => {
-      fetch('http://localhost:3000/judokas') 
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Error al obtener los datos');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setJudokas(data); 
-        })
-        .catch((error) => {
-          console.error('Error al obtener los datos del backend:', error);
-        });
-    }, []);
+//     useEffect(() => {
+//       fetch('http://localhost:3000/judokas') 
+//         .then((response) => {
+//           if (!response.ok) {
+//             throw new Error('Error al obtener los datos');
+//           }
+//           return response.json();
+//         })
+//         .then((data) => {
+//           setJudokas(data); 
+//         })
+//         .catch((error) => {
+//           console.error('Error al obtener los datos del backend:', error);
+//         });
+//     }, []);
     
-    judokas.map((judoka) => {
-      console.log(judoka);
-    })
-}
+//     judokas.map((judoka) => {
+//       console.log(judoka);
+//     })
+// }
 
 function Navbar({ setPaginaActual }) {
   const [menuAbierto, setMenuAbierto] = useState(false); 
@@ -35,13 +35,16 @@ function Navbar({ setPaginaActual }) {
   return (
     <nav className="navbar">
       <div className="logo">
-        <img src="./media/logo-judo.png" alt="Club de Judo" />
+        <img src="./media/logo-menu.jpg" alt="Club de Judo" />
       </div>
       <button className="menu-button" onClick={toggleMenu}>
         ☰
       </button>
       <div className={`menu ${menuAbierto ? "menu-abierto" : ""}`}>
         <button className="close-button" onClick={toggleMenu}>✖</button>
+        <div className="menu-logo">
+          <img src="./media/logo-judo.png" alt="Club de Judo" />
+        </div>
         <ul>
           <li><a href="#inicio" onClick={() => { setPaginaActual("inicio"); setMenuAbierto(false); }}>Inicio</a></li>
           <li><a href="#noticias" onClick={() => { setPaginaActual("noticias"); setMenuAbierto(false); }}>Noticias</a></li>
@@ -282,7 +285,6 @@ function UltimasNoticias () {
           return (
             <>
               <Competidores modo="competidores" />
-              <Footer />
             </>
           );
         case "noticias":

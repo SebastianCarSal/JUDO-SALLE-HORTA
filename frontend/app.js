@@ -201,7 +201,7 @@ function UltimasNoticias () {
                 <img src={competidor.url} alt={competidor.alias} />
               </div>
               <div className="info-competidor">
-                <h2>"{competidor.alias}"</h2>
+                <h2>"{competidor.apodo}"</h2>
                 <h1>{competidor.nombre} {competidor.apellido1}</h1>
                 <h3>{competidor.apellido2}</h3>
                 <p>{competidor.nacionalidad}</p>

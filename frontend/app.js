@@ -238,17 +238,27 @@ function UltimasNoticias () {
   }
 
   //Componente tienda
-  function Tienda(){
-
-    function Producto() {
-      return (
-        <div className="producto">
-          <img src="./media/judogui_ejemplo.png" className="imagen-producto" />
-        </div>
-      );
-    }
-
-    return(
+  function Tienda() {
+    const [productos, setProductos] = useState([]); 
+  
+    useEffect(() => {
+      // Recuperar datos desde el backend
+      fetch('http://localhost:3000/productosTienda')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setProductos(data); 
+        })
+        .catch((error) => {
+          console.error('Error al obtener los datos del backend:', error);
+        });
+    }, []); 
+  
+    return (
       <div className="tienda">
         <div className="filtros-tienda">
           <ul>
@@ -260,23 +270,17 @@ function UltimasNoticias () {
           </ul>
         </div>
         <div className="productos-tienda">
-          <Producto/>
-          <Producto/> 
-          <Producto/>
-          <Producto/>
-          <Producto/>
-          <Producto/>
-          <Producto/>
-          <Producto/>
-          <Producto/>
-          <Producto/>
+          {productos.map((producto, index) => (
+            <div key={index} className="producto">
+              <img src={producto.url} alt={producto.name} className="imagen-producto" />
+            </div>
+          ))}
         </div>
       </div>
     );
   }
-
+  
   //Componente Footer
-
   function Footer() {
     return (
       <div>

@@ -168,11 +168,10 @@ function SobreNosotros() {
 }
 
 //Componente competidores
-function Competidores({ modo }) {
+function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
   const [competidores, setCompetidores] = useState([]);
 
   useEffect(() => {
-    // Recuperar datos desde el backend
     fetch('http://localhost:3000/judokas')
       .then((response) => {
         if (!response.ok) {
@@ -188,15 +187,19 @@ function Competidores({ modo }) {
       });
   }, []);
 
-  // Filtrar competidores según el modo
   const competidoresAMostrar = modo === "inicio" ? competidores.slice(0, 3) : competidores;
+
+  const handleClick = (competidor) => {
+    setCompetidorSeleccionado(competidor);
+    setPaginaActual("perfilCompetidor");
+  };
 
   return (
     <div className={`competidores ${modo === "competidores" ? "padding-top" : ""}`}>
       <h1 className="titulo-competidores">COMPETIDORES</h1>
       <div className="cartas-competidores">
         {competidoresAMostrar.map((competidor, index) => (
-          <div key={index} className="carta-competidor">
+          <div key={index} className="carta-competidor" onClick={() => handleClick(competidor)}>
             <div className="peso">
               <h2>{competidor.peso}</h2>
               <h4>{competidor.nombrePeso}</h4>
@@ -213,6 +216,92 @@ function Competidores({ modo }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+//COMPONENTE PERFIL COMPETIDOR
+function PerfilCompetidor({ competidor }) {
+  if (!competidor) {
+    return <h2>No se encontró información del competidor</h2>;
+  }
+
+  // Asignar la URL de la bandera según el país
+  const obtenerBandera = (pais) => {
+    switch (pais) {
+      case "ESP":
+        return "./media/flags/esp.svg"; // Ruta de la bandera de España
+      case "PER":
+        return "./media/flags/per.png"; // Ruta de la bandera de Perú
+      case "RD":
+        return "./media/flags/rd.svg"; // Ruta de la bandera de República Dominicana
+      case "USA":
+        return "./media/flags/usa.png"; // Ruta de la bandera de Estados Unidos
+      default:
+        return "./media/flags/default.svg"; // Ruta de una bandera por defecto (opcional)
+    }
+  };
+
+  // Filtrar las medallas de la competición CEEB
+  const medallasCEEB = competidor.medallas.find((medalla) => medalla.id === "CEEB");
+  const medallasCopasESP = competidor.medallas.find((medalla) => medalla.id === "Copas de España");
+
+  return (
+    <div className="perfil-competidor">
+      <header className="header">
+        <div className="profile">
+          <img src={competidor.url} alt={`Foto de ${competidor.nombre}`} />
+          <div className="info">
+            <h1 className="nombre-completo">{competidor.nombre} {competidor.apellido1} {competidor.apellido2}</h1>
+            <p className="edad">Edad: {competidor.edad} años</p>
+            <p className="pais">
+              <img src={obtenerBandera(competidor.pais)} alt={`Bandera de ${competidor.pais}`} />
+              País: {competidor.pais}
+            </p>
+          </div>
+          <div className="weight">
+            <span>{competidor.peso}</span>
+            <small>{competidor.nombrePeso}</small>
+          </div>
+        </div>
+        <nav className="nav">
+          <a href="#" className="active">Medallas</a>
+          <a href="#">Fotos</a>
+        </nav>
+      </header>
+
+      <main>
+        <section className="medallas">
+          <h2>Medallas - Competición CEEB</h2>
+          {medallasCEEB ? (
+            <div className="lista-medallas">
+              <div className="medalla">
+                <h3>CEEB</h3>
+                <p>Oro: {medallasCEEB.oro}</p>
+                <p>Plata: {medallasCEEB.plata}</p>
+                <p>Bronce: {medallasCEEB.bronce}</p>
+              </div>
+            </div>
+          ) : (
+            <p>No se encontraron medallas para la competición CEEB.</p>
+          )}
+
+          <h2>Medallas - Competición COPAS DE ESPAÑA</h2>
+          {medallasCopasESP ? (
+            <div className="lista-medallas">
+              <div className="medalla">
+                <h3>COPAS DE ESPAÑA</h3>
+                <p>Oro: {medallasCopasESP.oro}</p>
+                <p>Plata: {medallasCopasESP.plata}</p>
+                <p>Bronce: {medallasCopasESP.bronce}</p>
+              </div>
+            </div>
+          ) : (
+            <p>No se encontraron medallas para la competición CEEB.</p>
+          )}
+        </section>
+      </main>
+      
     </div>
   );
 }
@@ -459,6 +548,7 @@ function LoginForm({ setPaginaActual }) {
 //Componente principal de la aplicación
 function App() {
   const [paginaActual, setPaginaActual] = useState("inicio");
+  const [competidorSeleccionado, setCompetidorSeleccionado] = useState(null);
 
   const renderizarContenido = () => {
     switch (paginaActual) {
@@ -468,35 +558,16 @@ function App() {
             <Carrusel />
             <UltimasNoticias />
             <SobreNosotros />
-            <Competidores modo="inicio" />
+            <Competidores modo="inicio" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
             <ContactoClub />
           </>
         );
       case "competidores":
         return (
-          <>
-            <Competidores modo="competidores" />
-          </>
+          <Competidores modo="competidores" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
         );
-      case "noticias":
-        return <UltimasNoticias />;
-      case "merch":
-        return (
-          <>
-            <h1>Merchandising</h1>
-            <Tienda />
-          </>
-        );
-      case "register":
-        return (
-          <RegisterForm setPaginaActual={setPaginaActual} />
-        );
-      case "login":
-        return (
-          <LoginForm setPaginaActual={setPaginaActual} />
-        );
-      case "nosotros":
-        return <SobreNosotros />;
+      case "perfilCompetidor":
+        return <PerfilCompetidor competidor={competidorSeleccionado} />;
       default:
         return <h1>Página no encontrada</h1>;
     }

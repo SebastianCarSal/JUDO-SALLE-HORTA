@@ -42,6 +42,9 @@ function Navbar({ setPaginaActual }) {
         <button className="menu-button" onClick={() => setPaginaActual("register")}>
           <img src="./media/register.png" alt="Registro" className="menu-icon" />
         </button>
+        <button className="menu-button" onClick={() => setPaginaActual("carrito")}>
+          <img src="./media/carrito.png" alt="Carrito" className="menu-icon" />
+        </button>
         <button className="menu-button" onClick={toggleMenu}>
           <img src="./media/menu.png" alt="Menú" className="menu-icon" />
         </button>
@@ -212,7 +215,7 @@ function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
               <img src={competidor.url} alt={competidor.alias} />
             </div>
             <div className="info-competidor">
-              <h2>"{competidor.alias}"</h2>
+              <h2>"{competidor.apodo}"</h2>
               <h1>{competidor.nombre} {competidor.apellido1}</h1>
               <h3>{competidor.apellido2}</h3>
               <p>{competidor.nacionalidad}</p>
@@ -230,18 +233,82 @@ function PerfilCompetidor({ competidor }) {
     return <h2>No se encontró información del competidor</h2>;
   }
 
+  // Asignar la URL de la bandera según el país
+  const obtenerBandera = (pais) => {
+    switch (pais) {
+      case "ESP":
+        return "./media/flags/esp.svg"; // Ruta de la bandera de España
+      case "PER":
+        return "./media/flags/per.png"; // Ruta de la bandera de Perú
+      case "RD":
+        return "./media/flags/rd.svg"; // Ruta de la bandera de República Dominicana
+      case "USA":
+        return "./media/flags/usa.png"; // Ruta de la bandera de Estados Unidos
+      default:
+        return "./media/flags/default.svg"; // Ruta de una bandera por defecto (opcional)
+    }
+  };
+
+  // Filtrar las medallas de la competición CEEB
+  const medallasCEEB = competidor.medallas.find((medalla) => medalla.id === "CEEB");
+  const medallasCopasESP = competidor.medallas.find((medalla) => medalla.id === "Copas de España");
+
   return (
     <div className="perfil-competidor">
-      <h1>Perfil de {competidor.nombre} "{competidor.alias}"</h1>
-      <div className="detalle-competidor">
-        <img src={competidor.url} alt={competidor.alias} />
-        <div>
-          <h2>Peso: {competidor.peso}</h2>
-          <h3>{competidor.nombrePeso}</h3>
-          <p>Nacionalidad: {competidor.nacionalidad}</p>
-          <p>Nombre completo: {competidor.nombre} {competidor.apellido1} {competidor.apellido2}</p>
+      <header className="header">
+        <div className="profile">
+          <img src={competidor.url} alt={`Foto de ${competidor.nombre}`} />
+          <div className="info">
+            <h1 className="nombre-completo">{competidor.nombre} {competidor.apellido1} {competidor.apellido2}</h1>
+            <p className="edad">Edad: {competidor.edad} años</p>
+            <p className="pais">
+              <img src={obtenerBandera(competidor.pais)} alt={`Bandera de ${competidor.pais}`} />
+              País: {competidor.pais}
+            </p>
+          </div>
+          <div className="weight">
+            <span>{competidor.peso}</span>
+            <small>{competidor.nombrePeso}</small>
+          </div>
         </div>
-      </div>
+        <nav className="nav">
+          <a href="#" className="active">Medallas</a>
+          <a href="#">Fotos</a>
+        </nav>
+      </header>
+
+      <main>
+        <section className="medallas">
+          <h2>Medallas - Competición CEEB</h2>
+          {medallasCEEB ? (
+            <div className="lista-medallas">
+              <div className="medalla">
+                <h3>CEEB</h3>
+                <p>Oro: {medallasCEEB.oro}</p>
+                <p>Plata: {medallasCEEB.plata}</p>
+                <p>Bronce: {medallasCEEB.bronce}</p>
+              </div>
+            </div>
+          ) : (
+            <p>No se encontraron medallas para la competición CEEB.</p>
+          )}
+
+          <h2>Medallas - Competición COPAS DE ESPAÑA</h2>
+          {medallasCopasESP ? (
+            <div className="lista-medallas">
+              <div className="medalla">
+                <h3>COPAS DE ESPAÑA</h3>
+                <p>Oro: {medallasCopasESP.oro}</p>
+                <p>Plata: {medallasCopasESP.plata}</p>
+                <p>Bronce: {medallasCopasESP.bronce}</p>
+              </div>
+            </div>
+          ) : (
+            <p>No se encontraron medallas para la competición CEEB.</p>
+          )}
+        </section>
+      </main>
+      
     </div>
   );
 }
@@ -270,50 +337,59 @@ function ContactoClub() {
   );
 }
 
-//Componente tienda
-function Tienda() {
-
-  function Producto() {
+  //Componente tienda
+  function Tienda() {
+    const [productos, setProductos] = useState([]); 
+  
+    useEffect(() => {
+      // Recuperar datos desde el backend
+      fetch('http://localhost:3000/productosTienda')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setProductos(data); 
+        })
+        .catch((error) => {
+          console.error('Error al obtener los datos del backend:', error);
+        });
+    }, []); 
+  
     return (
-      <div className="producto">
-        <img src="./media/judogui_ejemplo.png" className="imagen-producto" />
+      <div className="tienda">
+        <div className="filtros-tienda">
+          <ul>
+            <li><a href="#">TODO</a></li>
+            <li><a href="#">JUDOGIS</a></li>
+            <li><a href="#">CINTURONES</a></li>
+            <li><a href="#">CHANDAL</a></li>
+            <li><a href="#">CAMISETAS</a></li>
+          </ul>
+        </div>
+        <div className="productos-tienda">
+          {productos.map((producto, index) => (
+            <div key={index} className="producto-carta">
+              <img src={producto.url} alt={producto.name} className="imagen-producto" />
+              <div className="producto-detalles">
+                <h3 className="producto-nombre">{producto.name.split('/').pop().replace(/_/g, ' ').replace('.jpg', '')}</h3>
+                <p className="producto-precio">Precio: ${producto.precio || 'N/A'}</p>
+                <button className="producto-boton">Añadir al carrito</button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
-
-  return (
-    <div className="tienda">
-      <div className="filtros-tienda">
-        <ul>
-          <li><a href="#">TODO</a></li>
-          <li><a href="#">JUDOGIS</a></li>
-          <li><a href="#">CINTURONES</a></li>
-          <li><a href="#">CHANDAL</a></li>
-          <li><a href="#">CAMISETAS</a></li>
-        </ul>
-      </div>
-      <div className="productos-tienda">
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-        <Producto />
-      </div>
-    </div>
-  );
-}
-
-//Componente Footer
-
-function Footer() {
-  return (
-    <div>
-      <footer className="footer-distributed">
+  
+  //Componente Footer
+  function Footer() {
+    return (
+      <div>
+        <footer className="footer-distributed">
         <div className="footer-right">
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
             <img src="media/instagram.png" alt="Instagram" className="social-icon" />

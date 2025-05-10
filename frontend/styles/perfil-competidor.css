@@ -1,0 +1,165 @@
+/* Contenedor principal exclusivo para PerfilCompetidor */
+.perfil-competidor {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f5f5;
+    color: #222;
+
+}
+
+/* Header del perfil */
+.perfil-competidor .header {
+    background: linear-gradient(90deg, #000000, #a32330);
+    /* Degradado de negro a #a32330 */
+    color: white;
+    padding: 100px 40px 10px 40px;
+}
+
+/* Contenedor principal de perfil */
+.perfil-competidor .profile {
+    display: flex;
+    align-items: center;
+    /* Alinea verticalmente los hijos */
+    justify-content: flex-start;
+    /* Asegura que los hijos estén alineados a la izquierda */
+    gap: 40px;
+    /* Añade un espacio de 10px entre todos los hijos */
+    flex-wrap: nowrap;
+    height: 200px;
+    /* Altura fija del contenedor */
+}
+
+/* Imagen ocupa 20%, se alinea a la izquierda y se adapta en altura */
+.perfil-competidor .profile img {
+    height: 100%;
+    /* Ahora mide exactamente lo que mide .profile */
+    width: auto;
+    flex: 0 0 auto;
+    /* No se estira ni encoge */
+    object-fit: cover;
+}
+
+/* Info ocupa 40% */
+.perfil-competidor .info {
+    flex: 0 0 60%;
+}
+
+/* Estilo para el nombre completo (nombre y apellidos) */
+.perfil-competidor .info .nombre-completo {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+}
+/* Estilo para la edad */
+.perfil-competidor .info .edad {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #ffffff;
+    margin: 1px 0;
+}
+
+/* Estilo para el país */
+.perfil-competidor .info .pais {
+    font-family: 'Raleway', sans-serif;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: normal;
+    color: #ffffff;
+    margin: 1px 0;
+    display: flex; /* Activa flexbox para alinear la bandera y el texto */
+    align-items: center; /* Alinea verticalmente la bandera y el texto */
+}
+
+/* Estilo para la imagen de la bandera */
+.perfil-competidor .info .pais img {
+    width: 30px; /* Ancho de la bandera */
+    height: 20px; /* Altura de la bandera */
+    margin-right: 5px; /* Espacio entre la bandera y el texto */
+    
+}
+
+/* Peso ocupa 20% */
+/* Peso ocupa 20% */
+.perfil-competidor .weight {
+    border-top: 2px solid white; /* Borde blanco en la parte superior */
+    border-bottom: 2px solid white; /* Borde blanco en la parte inferior */
+    border-left: none; /* Sin borde en el lado izquierdo */
+    border-right: none; /* Sin borde en el lado derecho */
+    font-family: 'Bebas Neue', sans-serif;
+    flex: 0 0 15%;
+    font-size: 60px;
+    text-align: center;
+    margin-left: auto;
+    display: flex; /* Activa el modelo flexbox */
+    flex-direction: column; /* Coloca los elementos en una columna */
+    align-items: center; /* Centra los elementos horizontalmente */
+    justify-content: center; /* Centra los elementos verticalmente */
+    padding: 10px 0; /* Espaciado interno arriba y abajo */
+    height: 200px; /* Igual altura que .perfil-competidor .profile */
+}
+
+.perfil-competidor .weight small {
+    font-family: 'Raleway', sans-serif;
+    font-size: 16px;
+    display: block;
+}
+
+.perfil-competidor .info h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.perfil-competidor .info p {
+    margin: 5px 0;
+}
+
+.perfil-competidor .flag {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.perfil-competidor .nav {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    padding-left: 10px;
+}
+
+.perfil-competidor .nav a {
+    color: white;
+    text-decoration: none;
+    padding-bottom: 5px;
+}
+
+.perfil-competidor .nav a.active {
+    border-bottom: 3px solid #a32330;
+}
+
+.perfil-competidor .gallery {
+    background: white;
+    padding: 30px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.perfil-competidor .gallery h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.perfil-competidor .photos {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.perfil-competidor .photos img {
+    height: 150px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

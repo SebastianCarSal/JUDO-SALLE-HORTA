@@ -1,0 +1,43 @@
+/*CARRUSEL ESTILO*/
+.carrusel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100vh; 
+    margin: auto;
+  }
+  
+  .contenedor-imagen {
+    width: 100%;
+    height: 100vh; 
+    overflow: hidden;
+  }
+  
+  .imagen-carrusel {
+    width: 100%;
+    height: 100vh; 
+    object-fit: cover;
+    transition: all 0.5s ease;
+  }
+  
+  .anterior, .siguiente {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .anterior {
+    left: 10px;
+  }
+  
+  .siguiente {
+    right: 10px;
+  }

@@ -1,0 +1,119 @@
+    /*ULTIMAS NOTICIAS ESTILO*/
+    .ultimas-noticias {
+        padding:30px;
+        margin-bottom: 25px;
+      }
+      .ultimas-noticias h1{
+        color: #a32330;
+        font-family: 'Archivo Black', sans-serif;
+        text-transform: uppercase;
+        font-size: 32px;
+        padding:40px;
+      }
+      
+      .noticias{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center; 
+        gap:30px;
+        align-items: normal;
+        align-content: normal;
+        padding-bottom: 25px;
+      }
+      
+      .carta-noticia {
+        display: block;
+        flex-grow: 0;
+        flex-shrink: 1;
+        flex-basis: auto;
+        align-self: auto;
+        order: 0;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 400px;
+        margin: 10px;
+      }
+      
+      .imagen-noticia {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+      }
+      
+      .contenido-noticia {
+        font-family: 'Raleway', sans-serif;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+        
+      }
+      
+      .titulo-noticia {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 28px;
+        font-weight: bold;
+        margin: 8px 0;
+        color: #a32330;
+      }
+      
+      .descripcion-noticia {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 16px;
+      }
+      
+      .boton-noticia-completa {
+        align-self: flex-end;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+      }
+      
+      .boton-noticia-completa .icono-boton {
+        width: 24px;
+        height: 24px;
+        filter: invert(50%);
+      }
+      .boton-noticia-completa {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+      }
+      
+      .boton-noticia-completa .icono-boton {
+        width: 24px;
+        height: 24px;
+      } 
+      
+      .boton-ver-todas-noticias {
+        background-color: #a32330; 
+        color: white; 
+        border: none; 
+        border-radius: 8px; 
+        padding: 10px 20px; 
+        font-size: 14px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease, transform 0.2s ease; 
+        margin-left: auto;
+        display: block;
+      }
+      
+      .boton-ver-todas-noticias:hover {
+        background-color: #4b0e14; 
+        transform: scale(1.05); 
+      }
+      
+      .boton-ver-todas-noticias:active {
+        background-color: #002244; 
+        transform: scale(0.95);
+      }
+      

@@ -42,6 +42,9 @@ function Navbar({ setPaginaActual }) {
         <button className="menu-button" onClick={() => setPaginaActual("register")}>
           <img src="./media/register.png" alt="Registro" className="menu-icon" />
         </button>
+        <button className="menu-button" onClick={() => setPaginaActual("carrito")}>
+          <img src="./media/carrito.png" alt="Carrito" className="menu-icon" />
+        </button>
         <button className="menu-button" onClick={toggleMenu}>
           <img src="./media/menu.png" alt="Menú" className="menu-icon" />
         </button>

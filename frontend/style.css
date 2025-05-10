@@ -678,11 +678,15 @@
 /*ESTILOS REGISTER Y LOGIN */
 /* ===================================================================== */
 .register-container {
+  background-image: url('media/fondo-login-register.jpg');
+  background-size: cover;       /* Hace que la imagen cubra todo el fondo */
+  background-position: center;  /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que se repita */
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #263238;
+  
 }
 
 /* Estilos para el formulario */

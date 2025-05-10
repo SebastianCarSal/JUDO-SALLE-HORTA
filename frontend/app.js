@@ -172,11 +172,10 @@ function SobreNosotros() {
 }
 
 //Componente competidores
-function Competidores({ modo }) {
+function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
   const [competidores, setCompetidores] = useState([]);
 
   useEffect(() => {
-    // Recuperar datos desde el backend
     fetch('http://localhost:3000/judokas')
       .then((response) => {
         if (!response.ok) {
@@ -192,15 +191,19 @@ function Competidores({ modo }) {
       });
   }, []);
 
-  // Filtrar competidores según el modo
   const competidoresAMostrar = modo === "inicio" ? competidores.slice(0, 3) : competidores;
+
+  const handleClick = (competidor) => {
+    setCompetidorSeleccionado(competidor);
+    setPaginaActual("perfilCompetidor");
+  };
 
   return (
     <div className={`competidores ${modo === "competidores" ? "padding-top" : ""}`}>
       <h1 className="titulo-competidores">COMPETIDORES</h1>
       <div className="cartas-competidores">
         {competidoresAMostrar.map((competidor, index) => (
-          <div key={index} className="carta-competidor">
+          <div key={index} className="carta-competidor" onClick={() => handleClick(competidor)}>
             <div className="peso">
               <h2>{competidor.peso}</h2>
               <h4>{competidor.nombrePeso}</h4>
@@ -216,6 +219,28 @@ function Competidores({ modo }) {
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+//COMPONENTE PERFIL COMPETIDOR
+function PerfilCompetidor({ competidor }) {
+  if (!competidor) {
+    return <h2>No se encontró información del competidor</h2>;
+  }
+
+  return (
+    <div className="perfil-competidor">
+      <h1>Perfil de {competidor.nombre} "{competidor.alias}"</h1>
+      <div className="detalle-competidor">
+        <img src={competidor.url} alt={competidor.alias} />
+        <div>
+          <h2>Peso: {competidor.peso}</h2>
+          <h3>{competidor.nombrePeso}</h3>
+          <p>Nacionalidad: {competidor.nacionalidad}</p>
+          <p>Nombre completo: {competidor.nombre} {competidor.apellido1} {competidor.apellido2}</p>
+        </div>
       </div>
     </div>
   );
@@ -421,6 +446,7 @@ const LoginForm = ({ setPaginaActual }) => {
 //Componente principal de la aplicación
 function App() {
   const [paginaActual, setPaginaActual] = useState("inicio");
+  const [competidorSeleccionado, setCompetidorSeleccionado] = useState(null);
 
   const renderizarContenido = () => {
     switch (paginaActual) {
@@ -430,35 +456,16 @@ function App() {
             <Carrusel />
             <UltimasNoticias />
             <SobreNosotros />
-            <Competidores modo="inicio" />
+            <Competidores modo="inicio" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
             <ContactoClub />
           </>
         );
       case "competidores":
         return (
-          <>
-            <Competidores modo="competidores" />
-          </>
+          <Competidores modo="competidores" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
         );
-      case "noticias":
-        return <UltimasNoticias />;
-      case "merch":
-        return (
-          <>
-            <h1>Merchandising</h1>
-            <Tienda />
-          </>
-        );
-      case "register":
-        return (
-          <RegisterForm setPaginaActual={setPaginaActual} />
-        );
-      case "login":
-        return (
-          <LoginForm setPaginaActual={setPaginaActual} />
-        );
-      case "nosotros":
-        return <SobreNosotros />;
+      case "perfilCompetidor":
+        return <PerfilCompetidor competidor={competidorSeleccionado} />;
       default:
         return <h1>Página no encontrada</h1>;
     }

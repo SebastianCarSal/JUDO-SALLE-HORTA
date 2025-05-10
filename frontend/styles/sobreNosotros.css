@@ -1,0 +1,81 @@
+/*SOBRE NOSOTROS ESTILO*/
+    /* Estilo general del contenedor */
+    .sobre-nosotros {
+        background-image: url('../media/fondosn.jpg');
+        background-size: cover;         
+        background-position: center;    
+        background-repeat: no-repeat;   
+        color: white; 
+        padding: 40px;
+        padding-bottom: 80px;
+      }
+      
+      .sobre-nosotros h1 {
+        color: #ffffff;
+        font-family: 'Archivo Black', sans-serif;
+        text-transform: uppercase;
+        font-size: 32px;
+        padding: 40px;
+      }
+      
+      .contenido-sobre-nosotros {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        grid-template-rows: auto auto;
+        gap: 20px; 
+        align-items: center;
+      }
+      
+      .imagenes1-sobre-nosotros {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      
+      .imagenes1-sobre-nosotros .svg1,
+      .imagenes1-sobre-nosotros .svg2,
+      .imagenes1-sobre-nosotros .svg3,
+      .imagenes1-sobre-nosotros .svg4 {
+        flex: 1 1 100px; 
+      }
+      
+      .imagenes1-sobre-nosotros img {
+        max-width: 80px;
+        height: auto;
+      }
+      
+      .texto1-sobre-nosotros {
+        font-family: 'Raleway', sans-serif;
+        text-align: left;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      
+      .texto1-sobre-nosotros h3 {
+        color: #ffffff;
+        font-family: 'Archivo Black', sans-serif;
+        font-size: 20px; 
+        margin-bottom: 10px;
+      }
+      
+      .texto2-sobre-nosotros {
+        font-family: 'Raleway', sans-serif;
+        text-align: left;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      
+      .texto2-sobre-nosotros h3 {
+        color: #ffffff;
+        font-family: 'Archivo Black', sans-serif;
+        font-size: 20px; 
+        margin-bottom: 10px;
+      }
+      
+      .imagenes2-sobre-nosotros img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      }
+      

@@ -756,6 +756,7 @@
   }
   
 /*ESTILO TIENDA*/
+
 .tienda {
   display: flex;
   flex-direction: row;

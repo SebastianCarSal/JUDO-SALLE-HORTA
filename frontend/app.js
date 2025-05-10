@@ -271,8 +271,13 @@ function UltimasNoticias () {
         </div>
         <div className="productos-tienda">
           {productos.map((producto, index) => (
-            <div key={index} className="producto">
+            <div key={index} className="producto-carta">
               <img src={producto.url} alt={producto.name} className="imagen-producto" />
+              <div className="producto-detalles">
+                <h3 className="producto-nombre">{producto.name.split('/').pop().replace(/_/g, ' ').replace('.jpg', '')}</h3>
+                <p className="producto-precio">Precio: ${producto.precio || 'N/A'}</p>
+                <button className="producto-boton">Añadir al carrito</button>
+              </div>
             </div>
           ))}
         </div>
@@ -306,7 +311,6 @@ function UltimasNoticias () {
     );
   };
   
-
   //Componente principal de la aplicación
   function App() {
     const [paginaActual, setPaginaActual] = useState("inicio");

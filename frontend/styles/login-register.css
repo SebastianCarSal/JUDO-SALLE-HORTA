@@ -1,0 +1,107 @@
+/*ESTILOS REGISTER Y LOGIN */
+/* ===================================================================== */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #263238;
+  }
+  
+  /* Estilos para el formulario */
+  .register-form {
+    background-color: #2c3940;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #a32330; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 15px rgba(163, 35, 48, 0.5); 
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  
+  /* Título del formulario */
+  .register-form h2 {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase; 
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 24px;
+    padding: 30px;
+  }
+  
+  /* Estilos para los grupos de entrada */
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    font-family: 'Raleway', sans-serif;
+    display: block;
+    font-size: 14px;
+    color: white;
+    margin-bottom: 8px;
+  }
+  
+  .input-group input {
+    font-family: 'Raleway', sans-serif;
+    width: 100%;
+    padding: 10px;
+    border: none; 
+    border-bottom: 2px solid #ffffff; 
+    font-size: 16px;
+    color: #ffffff;
+    background-color: transparent; 
+    transition: border-bottom 0.3s ease; 
+  }
+  
+  .input-group input:focus {
+    border-bottom: 2px solid #a32330; 
+    outline: none; 
+  }
+  
+  
+  /* Estilos para el botón de submit */
+  .submit-btn {
+    font-family: 'Raleway', sans-serif;
+    width: 100%;
+    padding: 12px;
+    background-color: #a32330;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #a32330;
+  }
+  
+  /* Agregar un margen a la parte inferior */
+  .submit-btn:active {
+    background-color: #a32330;
+  }
+  
+  /* Estilos generales para el enlace */
+  .login-link {
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ddd;
+  }
+  
+  .login-link a {
+    font-family: 'Raleway', sans-serif;
+    color: #3591bb; 
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+  

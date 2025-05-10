@@ -1,0 +1,93 @@
+ /*CONTACTANOS ESTILO*/
+ .contacto-club {
+    background-image: url('../media/fondoc.jpg');
+    background-size: cover;         
+    background-position: center;    
+    background-repeat: no-repeat;
+    color: white; 
+    padding: 40px;
+    text-align: left;
+  }
+  
+  .contacto-club h1 {
+    color: #ffffff;
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase; /* MAYUSCULAS */
+    font-size: 32px;
+    margin: 40px 0;
+  }
+  
+  .contacto-club h4 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .contacto-club p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  
+  .contacto-club h3 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+  
+  .contenido-contacto-club {
+    margin-bottom: 20px;
+  }
+  
+  .formulario-contacto-club {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    align-items: center;
+  }
+  
+  .input-contacto-nombre,
+  .input-contacto-email,
+  .input-contacto-telefono,
+  .input-contacto-motivo,
+  .input-contacto-mensaje {
+    font-family: 'Raleway', sans-serif;
+    background-color: #f5f5f5; 
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box; 
+  }
+  
+  .input-contacto-mensaje {
+    grid-column: span 2; 
+    height: 100px; 
+  }
+  
+  .boton-contacto-enviar {
+    background-color: #ffffff; 
+    color: #a32330; 
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    grid-column: span 2; 
+    justify-self: end; 
+  }
+  
+  .boton-contacto-enviar:hover {
+    background-color: #949393; 
+    transform: scale(1.05); 
+  }
+  
+  .boton-contacto-enviar:active {
+    background-color: #a32330; 
+    transform: scale(0.95); 
+  }
+  

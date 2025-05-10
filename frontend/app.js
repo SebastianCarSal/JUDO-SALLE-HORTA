@@ -1,29 +1,22 @@
 const { useState, useEffect } = React;
 
-//recuperacion de datos ejemplo
-// function recuperacionDatos(){
-//   const [judokas, setJudokas] = useState([]);
+function initializeFirebase() {
+  const firebaseConfig = {
+    apiKey: "AIzaSyApd_ZTn6MXLd_RZPlPkHhVw_uRX7otaEo",
+    authDomain: "judosallehorta.firebaseapp.com",
+    projectId: "judosallehorta",
+    storageBucket: "judosallehorta.firebasestorage.app",
+    messagingSenderId: "381729018796",
+    appId: "1:381729018796:web:223401cb51ced3927e2009",
+    measurementId: "G-D797CEKL42"
+  };
 
-//     useEffect(() => {
-//       fetch('http://localhost:3000/judokas') 
-//         .then((response) => {
-//           if (!response.ok) {
-//             throw new Error('Error al obtener los datos');
-//           }
-//           return response.json();
-//         })
-//         .then((data) => {
-//           setJudokas(data); 
-//         })
-//         .catch((error) => {
-//           console.error('Error al obtener los datos del backend:', error);
-//         });
-//     }, []);
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
-//     judokas.map((judoka) => {
-//       console.log(judoka);
-//     })
-// }
+  return firebase.auth();
+}
 
 function Navbar({ setPaginaActual }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -323,14 +316,30 @@ function ContactoClub() {
 };
 
 //COMPONENTE REGITSER
-const RegisterForm = ({ setPaginaActual }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function RegisterForm({ setPaginaActual }) {
+  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Usuario registrado:', { username, email, password });
+    const auth = initializeFirebase(); // obtenés la instancia aquí
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        return userCredential.user.updateProfile({
+          displayName: username
+        });
+      })
+      .then(() => {
+        console.log("Usuario registrado");
+        setPaginaActual("login");
+      })
+      .catch(err => {
+        console.error(err);
+        setError(err.message);
+      });
   };
 
   return (
@@ -382,19 +391,35 @@ const RegisterForm = ({ setPaginaActual }) => {
 };
 
 //COMPONENTE LOGIN
-const LoginForm = ({ setPaginaActual }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function LoginForm({ setPaginaActual }) {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Usuario logueado:', { email, password });
+    const auth = initializeFirebase();
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        console.log("Logueado:", userCredential.user);
+
+        userCredential.user.getIdToken()
+          .then((token) => {
+            console.log("Token JWT:", token);
+          });
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err.message);
+      });
   };
 
   return (
-    <div className="register-container">
-      <form className="register-form" onSubmit={handleSubmit}>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
         <h2>Iniciar sesión</h2>
+        {error && <p className="error-msg">{error}</p>} 
 
         <div className="input-group">
           <label htmlFor="email">Correo electrónico</label>
@@ -420,13 +445,14 @@ const LoginForm = ({ setPaginaActual }) => {
 
         <button type="submit" className="submit-btn">Iniciar sesión</button>
 
-        <p className="login-link">
+        <p className="register-link">
           ¿No tienes cuenta? <a onClick={() => setPaginaActual("register")}>Regístrate aquí</a>
         </p>
       </form>
     </div>
   );
-};
+}
+
 
 
 

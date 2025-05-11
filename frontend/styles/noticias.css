@@ -1,0 +1,120 @@
+.noticias-body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 0, 0, 0);
+}
+
+.contenedor-titulo {
+    background-color: #007bff;
+    /* Color azul */
+    width: 100%;
+    /* Se adapta horizontalmente al ancho de la pantalla */
+    height: 250px;
+    /* Altura fija */
+    position: relative;
+    /* Necesario para posicionar elementos hijos con position: absolute */
+    color: white;
+    /* Color del texto */
+    font-size: 20px;
+    /* Tamaño del texto */
+}
+
+.contenedor-titulo h1 {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 10px;
+    left: 50px;
+    bottom: 50px;
+    margin: 0;
+    font-size: 36px;
+    color: #a32330;
+}
+
+.noticias-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+
+}
+
+.noticias-titulo-bloque {
+    background-color: #a32330;
+    color: white;
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+.noticias-item {
+    position: relative;
+    /* Necesario para que la imagen se posicione dentro del contenedor */
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    /* Mantiene el padding para el texto */
+    gap: 20px;
+    align-items: stretch;
+    /* Asegura que los elementos hijos tengan la misma altura */
+}
+
+.noticias-imagen {
+    position: absolute;
+    /* Saca la imagen del flujo normal */
+    top: 0;
+    right: 0;
+    width: 400px;
+    /* Fija el ancho máximo de la imagen */
+    height: 100%;
+    /* Hace que la imagen ocupe toda la altura del contenedor */
+    border: none;
+    /* Elimina bordes si no son necesarios */
+}
+
+.noticias-imagen img {
+    display: block;
+    width: 100%;
+    /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 100%;
+    /* Asegura que la imagen ocupe toda la altura del contenedor */
+    object-fit: cover;
+    /* Recorta la imagen si es necesario para ajustarse al contenedor */
+    margin: 0;
+    /* Elimina márgenes */
+}
+
+.noticias-texto {
+    flex: 1;
+    padding-right: 450px;
+    /* Añade espacio entre el texto y la imagen */
+    z-index: 1;
+    /* Asegura que el texto esté por encima de la imagen */
+    text-align: justify;
+}
+
+.noticias-texto h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.noticias-meta {
+    font-size: 14px;
+    color: #a32330;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.noticias-boton {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #a32330;
+    color: white;
+    padding: 10px 16px;
+    text-decoration: none;
+    font-size: 14px;
+}

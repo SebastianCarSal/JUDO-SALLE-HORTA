@@ -43,6 +43,7 @@
       padding: 0;
       box-sizing: border-box;
     }
+
 .navbar {
     position: fixed; 
     left: 0;
@@ -50,12 +51,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+    padding: 10px 50px; /* Espaciado interno */
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
     z-index: 10;
     max-height: 80px;
-    padding: 10px 50px; 
-    }
+}
     
     .logo img {
       height: 70px; 

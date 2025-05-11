@@ -36,6 +36,7 @@ function Navbar({ setPaginaActual }) {
       </div>
 
       <div className="menu-buttons">
+        <label className="menu-button"></label>
         <button className="menu-button" onClick={() => setPaginaActual("login")}>
           <img src="./media/register.png" alt="Registro" className="menu-icon" />
         </button>

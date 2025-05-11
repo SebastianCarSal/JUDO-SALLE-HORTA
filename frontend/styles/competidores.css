@@ -1,23 +1,22 @@
    /*COMPETIDORES ESTILO*/
     /* CONTENEDOR GENERAL */
     .competidores {
-        margin: 40px 0; 
+        margin: 0; 
         
       }
       .competidores.padding-top {
-        padding-top: 80px; 
+        padding-top: 0px; 
         margin: 0 auto;
       }
-    
-    /* TÍTULO */
-    .titulo-competidores {
+      
+        .titulo-competidores {
       padding: 40px;
       color: #a32330;
       font-family: 'Archivo Black', sans-serif;
       text-transform: uppercase; 
       font-size: 32px;
     }
-    
+
     /* CONTENEDOR DE CARTAS */
     .cartas-competidores {
       display: flex;

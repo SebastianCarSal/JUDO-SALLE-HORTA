@@ -168,6 +168,7 @@ function UltimasNoticias() {
   );
 }
 
+// COMPONENTE LISTA DE NOTICIAS
 function ListaNoticias() {
   const [noticias, setNoticias] = useState([]);
 
@@ -175,7 +176,8 @@ function ListaNoticias() {
     const { firestore } = initializeFirebase();
 
     // Recuperar todas las noticias desde Firestore
-    firestore.collection("noticias")
+    firestore
+      .collection("noticias")
       .orderBy("fecha", "desc") // Ordenar por fecha descendente
       .get()
       .then((querySnapshot) => {
@@ -194,7 +196,7 @@ function ListaNoticias() {
     <div className="noticias-body">
       {/* Contenedor azul arriba del todo */}
       <div className="contenedor-titulo">
-        <h1>NOTICIAS</h1>
+        <h1>NOTICIAS DEL CLUB</h1>
       </div>
 
       <div className="noticias-container">
@@ -204,12 +206,12 @@ function ListaNoticias() {
             <div className="noticias-texto">
               <h3>{noticia.titulo || "Título no disponible"}</h3>
               <p className="noticias-meta">
-                {noticia.fecha
-                  ? `Publicado el ${new Date(noticia.fecha.seconds * 1000).toLocaleDateString()}`
-                  : "Fecha no disponible"}
+                {`Publicado el ${noticia.fecha || "Fecha no disponible"}`}
               </p>
               <p>{noticia.info || "Descripción no disponible"}</p>
-              <a className="noticias-boton" href="#">Seguir leyendo</a>
+              <a className="noticias-boton" href="#">
+                Seguir leyendo
+              </a>
             </div>
             <div className="noticias-imagen">
               <img
@@ -289,7 +291,13 @@ function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
 
   return (
     <div className={`competidores ${modo === "competidores" ? "padding-top" : ""}`}>
-      <h1 className="titulo-competidores">COMPETIDORES</h1>
+      {/* Mostrar ContenedorTitulo solo si el modo es "competidores" */}
+      {modo === "competidores" && (
+        <ContenedorTitulo
+          titulo="COMPETIDORES"
+          fondo="./media/fondo-banner.jpg"
+        />
+      )}
       <div className="cartas-competidores">
         {competidoresAMostrar.map((competidor, index) => (
           <div key={index} className="carta-competidor" onClick={() => handleClick(competidor)}>
@@ -711,6 +719,18 @@ function LoginForm({ setPaginaActual }) {
   );
 }
 
+// COMPONENTE DE BANNER
+function ContenedorTitulo({ titulo, fondo }) {
+  return (
+    <div
+      className="contenedor-titulo"
+      style={{ backgroundImage: `url(${fondo})` }} // Permite personalizar la imagen de fondo
+    >
+      <h1>{titulo}</h1>
+    </div>
+  );
+}
+
 //Componente principal de la aplicación
 function App() {
   const [paginaActual, setPaginaActual] = useState("inicio");
@@ -807,6 +827,7 @@ function App() {
             <Carrusel />
             <UltimasNoticias />
             <SobreNosotros />
+            <h1 className="titulo-competidores">COMPETIDORES</h1> {/* Clase aplicada */}
             <Competidores modo="inicio" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
             <ContactoClub />
           </>

@@ -1,23 +1,21 @@
    /*COMPETIDORES ESTILO*/
-   /* CONTENEDOR GENERAL */
-   .competidores {
-     margin: 0;
-
-   }
-
-   .competidores.padding-top {
-     padding-top: 0px;
-     margin: 0 auto;
-     
-   }
-
-   .titulo-competidores {
-     padding: 40px;
-     color: #a32330;
-     font-family: 'Archivo Black', sans-serif;
-     text-transform: uppercase;
-     font-size: 32px;
-   }
+    /* CONTENEDOR GENERAL */
+    .competidores {
+        margin: 0; 
+        margin-bottom: 50px;
+      }
+      .competidores.padding-top {
+        padding-top: 0px; 
+        margin: 0 auto;
+      }
+      
+        .titulo-competidores {
+      padding: 40px;
+      color: #a32330;
+      font-family: 'Archivo Black', sans-serif;
+      text-transform: uppercase; 
+      font-size: 32px;
+    }
 
    /* CONTENEDOR DE CARTAS */
    .cartas-competidores {

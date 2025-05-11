@@ -119,8 +119,8 @@ function UltimasNoticias() {
 
     // Recuperar las 3 primeras noticias desde Firestore
     firestore.collection("noticias")
-      .orderBy("fecha", "desc") // Ordenar por fecha descendente
-      .limit(3) // Limitar a las 3 primeras noticias
+      .orderBy("fecha", "desc") 
+      .limit(3) 
       .get()
       .then((querySnapshot) => {
         const noticiasData = querySnapshot.docs.map((doc) => ({
@@ -182,7 +182,7 @@ function ListaNoticias() {
     // Recuperar todas las noticias desde Firestore
     firestore
       .collection("noticias")
-      .orderBy("fecha", "desc") // Ordenar por fecha descendente
+      .orderBy("fecha", "desc") 
       .get()
       .then((querySnapshot) => {
         const noticiasData = querySnapshot.docs.map((doc) => ({
@@ -198,7 +198,6 @@ function ListaNoticias() {
 
   return (
     <div className="noticias-body">
-      {/* Contenedor azul arriba del todo */}
       <div className="contenedor-titulo">
         <h1>NOTICIAS DEL CLUB</h1>
       </div>
@@ -219,8 +218,8 @@ function ListaNoticias() {
             </div>
             <div className="noticias-imagen">
               <img
-                src={noticia.url || "./media/default-image.png"} // Imagen por defecto si falta la URL
-                alt={noticia.titulo || "Noticia sin título"} // Texto alternativo por defecto
+                src={noticia.url || "./media/default-image.png"}
+                alt={noticia.titulo || "Noticia sin título"} 
               />
             </div>
           </div>
@@ -312,7 +311,6 @@ function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
 
   return (
     <div className={`competidores ${modo === "competidores" ? "padding-top" : ""}`}>
-      {/* Mostrar ContenedorTitulo solo si el modo es "competidores" */}
       {modo === "competidores" && (
         <ContenedorTitulo
           titulo="COMPETIDORES"
@@ -448,64 +446,106 @@ function ContactoClub() {
   );
 }
 
-//Componente tienda
-function Tienda({ agregarProductoAlCarrito }) {
-  const [productos, setProductos] = useState([]);
-
-  useEffect(() => {
-    // Recuperar datos desde el endpoint
-    fetch('http://localhost:3000/productos')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al obtener los datos');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProductos(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los datos del backend:', error);
-      });
-  }, []);
-
-  return (
-    <div className="tienda">
-      <div className="filtros-tienda">
-        <ul>
-          <li><a href="#">TODO</a></li>
-          <li><a href="#">JUDOGIS</a></li>
-          <li><a href="#">CINTURONES</a></li>
-          <li><a href="#">CHANDAL</a></li>
-          <li><a href="#">CAMISETAS</a></li>
-        </ul>
-      </div>
-      <div className="productos-tienda">
-        {productos.map((producto, index) => (
-          <div key={index} className="producto-carta">
-            <img src={producto.url} alt={producto.nombre} className="imagen-producto" />
-            <div className="producto-detalles">
-              <h3 className="producto-nombre">{producto.nombre}</h3>
-              <p className="producto-precio">Precio: ${producto.precio || 'N/A'}</p>
-              <button
-                className="producto-boton"
-                onClick={() => agregarProductoAlCarrito(producto)}
+  //Componente tienda
+  function Tienda({ agregarProductoAlCarrito }) {
+    const [productos, setProductos] = useState([]);
+    const [filtroSeleccionado, setFiltroSeleccionado] = useState("TODO"); 
+  
+    useEffect(() => {
+      // Recuperar datos desde el endpoint
+      fetch('http://localhost:3000/productos')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setProductos(data);
+        })
+        .catch((error) => {
+          console.error('Error al obtener los datos del backend:', error);
+        });
+    }, []);
+  
+    // Filtrar los productos según el filtro seleccionado
+    const productosFiltrados = filtroSeleccionado === "TODO"
+      ? productos
+      : productos.filter((producto) => producto.filtro === filtroSeleccionado);
+  
+    return (
+      <>
+        <ContenedorTitulo
+          titulo="MERCH"
+          fondo="./media/fondo-banner.jpg"
+        />
+        <div className="tienda">
+          <div className="filtros-tienda">
+            <ul>
+              <li
+                className={filtroSeleccionado === "TODO" ? "seleccionado" : ""}
+                onClick={() => setFiltroSeleccionado("TODO")}
               >
-                Añadir al carrito
-              </button>
-            </div>
+                TODO
+              </li>
+              <li
+                className={filtroSeleccionado === "judogui" ? "seleccionado" : ""}
+                onClick={() => setFiltroSeleccionado("judogui")}
+              >
+                JUDOGIS
+              </li>
+              <li
+                className={filtroSeleccionado === "cinturon" ? "seleccionado" : ""}
+                onClick={() => setFiltroSeleccionado("cinturon")}
+              >
+                CINTURONES
+              </li>
+              <li
+                className={filtroSeleccionado === "chandal" ? "seleccionado" : ""}
+                onClick={() => setFiltroSeleccionado("chandal")}
+              >
+                CHANDAL
+              </li>
+              <li
+                className={filtroSeleccionado === "camiseta" ? "seleccionado" : ""}
+                onClick={() => setFiltroSeleccionado("camiseta")}
+              >
+                CAMISETAS
+              </li>
+              <li
+                className={filtroSeleccionado === "complemento" ? "seleccionado" : ""}
+                onClick={() => setFiltroSeleccionado("complemento")}
+              >
+                COMPLEMENTOS
+              </li>
+            </ul>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-//Componente Footer
-function Footer() {
-  return (
-    <div>
-      <footer className="footer-distributed">
+          <div className="productos-tienda">
+            {productosFiltrados.map((producto, index) => (
+              <div key={index} className="producto-carta">
+                <img src={producto.url} alt={producto.nombre} className="imagen-producto" />
+                <div className="producto-detalles">
+                  <h3 className="producto-nombre">{producto.nombre}</h3>
+                  <p className="producto-precio">Precio: ${producto.precio || 'N/A'}</p>
+                  <button
+                    className="producto-boton"
+                    onClick={() => agregarProductoAlCarrito(producto)}
+                  >
+                    Añadir al carrito
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+  //Componente Footer
+  function Footer() {
+    return (
+      <div>
+        <footer className="footer-distributed">
         <div className="footer-right">
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
             <img src="media/instagram.png" alt="Instagram" className="social-icon" />
@@ -754,7 +794,7 @@ function ContenedorTitulo({ titulo, fondo }) {
   return (
     <div
       className="contenedor-titulo"
-      style={{ backgroundImage: `url(${fondo})` }} // Permite personalizar la imagen de fondo
+      style={{ backgroundImage: `url(${fondo})` }} 
     >
       <h1>{titulo}</h1>
     </div>
@@ -794,7 +834,7 @@ function App() {
           .catch((error) => console.error('Error al recuperar el carrito:', error));
       } else {
         setUsuario(null);
-        setProductosCarrito([]); // Limpiar el carrito si no hay usuario
+        setProductosCarrito([]); 
       }
     });
 
@@ -803,7 +843,7 @@ function App() {
 
   const mostrarMensaje = (texto) => {
     setMensaje(texto);
-    setTimeout(() => setMensaje(""), 3000); // Ocultar el mensaje después de 3 segundos
+    setTimeout(() => setMensaje(""), 3000); 
   };
 
   const agregarProductoAlCarrito = (producto) => {
@@ -857,7 +897,7 @@ function App() {
             <Carrusel />
             <UltimasNoticias />
             <SobreNosotros />
-            <h1 className="titulo-competidores">COMPETIDORES</h1> {/* Clase aplicada */}
+            <h1 className="titulo-competidores">COMPETIDORES</h1> 
             <Competidores modo="inicio" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
             <ContactoClub />
           </>

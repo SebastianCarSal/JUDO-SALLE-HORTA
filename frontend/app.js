@@ -16,17 +16,24 @@ function initializeFirebase() {
   }
 
   return {
-    auth: firebase.auth(), // Firebase Authentication
-    firestore: firebase.firestore(), // Firebase Firestore
-    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp, // Timestamp para Firestore
+    auth: firebase.auth(), 
+    firestore: firebase.firestore(),
+    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp, 
   };
 }
 
-function Navbar({ setPaginaActual }) {
+function Navbar({ setPaginaActual, usuario }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
+  };
+
+  const handleLogout = () => {
+    const { auth } = initializeFirebase();
+    auth.signOut().then(() => {
+      console.log("Usuario cerró sesión");
+    });
   };
 
   return (
@@ -36,10 +43,18 @@ function Navbar({ setPaginaActual }) {
       </div>
 
       <div className="menu-buttons">
-        <label className="menu-button"></label>
-        <button className="menu-button" onClick={() => setPaginaActual("login")}>
-          <img src="./media/register.png" alt="Registro" className="menu-icon" />
-        </button>
+        {usuario ? (
+          <div className="usuario-info">
+            <span className="usuario-nombre">Hola, {usuario.displayName || usuario.email}</span>
+            <button className="menu-button" onClick={handleLogout}>
+              <img src="./media/logout-icon.png" alt="Cerrar sesión" className="menu-icon" />
+            </button>
+          </div>
+        ) : (
+          <button className="menu-button" onClick={() => setPaginaActual("login")}>
+            <img src="./media/register.png" alt="Registro" className="menu-icon" />
+          </button>
+        )}
         <button className="menu-button" onClick={() => setPaginaActual("carrito")}>
           <img src="./media/carrito.png" alt="Carrito" className="menu-icon" />
         </button>
@@ -47,7 +62,6 @@ function Navbar({ setPaginaActual }) {
           <img src="./media/menu.png" alt="Menú" className="menu-icon" />
         </button>
       </div>
-
 
       <div className={`menu ${menuAbierto ? "menu-abierto" : ""}`}>
         <button className="close-button" onClick={toggleMenu}>✖</button>
@@ -235,15 +249,15 @@ function PerfilCompetidor({ competidor }) {
   const obtenerBandera = (pais) => {
     switch (pais) {
       case "ESP":
-        return "./media/flags/esp.svg"; // Ruta de la bandera de España
+        return "./media/flags/esp.svg"; 
       case "PER":
-        return "./media/flags/per.png"; // Ruta de la bandera de Perú
+        return "./media/flags/per.png"; 
       case "RD":
-        return "./media/flags/rd.svg"; // Ruta de la bandera de República Dominicana
+        return "./media/flags/rd.svg"; 
       case "USA":
-        return "./media/flags/usa.png"; // Ruta de la bandera de Estados Unidos
+        return "./media/flags/usa.png"; 
       default:
-        return "./media/flags/default.svg"; // Ruta de una bandera por defecto (opcional)
+        return "./media/flags/default.svg"; 
     }
   };
 
@@ -427,7 +441,6 @@ function RegisterForm({ setPaginaActual }) {
         return user.updateProfile({
           displayName: username,
         }).then(() => {
-          // Crear un documento en Firestore con los datos del usuario
           return firestore.collection('users').doc(username).set({
             username: username,
             email: user.email,
@@ -501,16 +514,16 @@ function LoginForm({ setPaginaActual }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const auth = initializeFirebase();
+    const { auth } = initializeFirebase();
 
     auth.signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        console.log("Logueado:", userCredential.user);
+        const user = userCredential.user;
 
-        userCredential.user.getIdToken()
-          .then((token) => {
-            console.log("Token JWT:", token);
-          });
+        console.log("Logueado:", user);
+
+        // Redirigir al inicio después de iniciar sesión
+        setPaginaActual("inicio");
       })
       .catch((err) => {
         console.error(err);
@@ -560,6 +573,28 @@ function LoginForm({ setPaginaActual }) {
 function App() {
   const [paginaActual, setPaginaActual] = useState("inicio");
   const [competidorSeleccionado, setCompetidorSeleccionado] = useState(null);
+  const [usuario, setUsuario] = useState(null); 
+
+  useEffect(() => {
+    const { auth } = initializeFirebase();
+
+    // Escuchar cambios en el estado de autenticación
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Usuario autenticado
+        setUsuario({
+          displayName: user.displayName,
+          email: user.email,
+          uid: user.uid,
+        });
+      } else {
+        setUsuario(null);
+      }
+    });
+
+    // Limpiar el listener al desmontar el componente
+    return () => unsubscribe();
+  }, []);
 
   const renderizarContenido = () => {
     switch (paginaActual) {
@@ -596,7 +631,7 @@ function App() {
 
   return (
     <div>
-      <Navbar setPaginaActual={setPaginaActual} />
+      <Navbar setPaginaActual={setPaginaActual} usuario={usuario} /> {/* Pasar el usuario al Navbar */}
       <div>{renderizarContenido()}</div>
       <Footer />
     </div>

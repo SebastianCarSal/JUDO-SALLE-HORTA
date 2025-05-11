@@ -1,7 +1,6 @@
 /* Contenedor principal exclusivo para PerfilCompetidor */
 .perfil-competidor {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
     background: #f5f5f5;
     color: #222;
 
@@ -12,7 +11,7 @@
     background: linear-gradient(90deg, #000000, #a32330);
     /* Degradado de negro a #a32330 */
     color: white;
-    padding: 100px 40px 10px 40px;
+    padding: 100px 80px 10px 80px;
 }
 
 /* Contenedor principal de perfil */
@@ -53,6 +52,7 @@
     color: #ffffff;
     margin: 0;
 }
+
 /* Estilo para la edad */
 .perfil-competidor .info .edad {
     font-family: 'Bebas Neue', sans-serif;
@@ -69,36 +69,51 @@
     font-weight: normal;
     color: #ffffff;
     margin: 1px 0;
-    display: flex; /* Activa flexbox para alinear la bandera y el texto */
-    align-items: center; /* Alinea verticalmente la bandera y el texto */
+    display: flex;
+    /* Activa flexbox para alinear la bandera y el texto */
+    align-items: center;
+    /* Alinea verticalmente la bandera y el texto */
 }
 
 /* Estilo para la imagen de la bandera */
 .perfil-competidor .info .pais img {
-    width: 30px; /* Ancho de la bandera */
-    height: 20px; /* Altura de la bandera */
-    margin-right: 5px; /* Espacio entre la bandera y el texto */
-    
+    width: 30px;
+    /* Ancho de la bandera */
+    height: 20px;
+    /* Altura de la bandera */
+    margin-right: 5px;
+    /* Espacio entre la bandera y el texto */
+
 }
 
 /* Peso ocupa 20% */
 /* Peso ocupa 20% */
 .perfil-competidor .weight {
-    border-top: 2px solid white; /* Borde blanco en la parte superior */
-    border-bottom: 2px solid white; /* Borde blanco en la parte inferior */
-    border-left: none; /* Sin borde en el lado izquierdo */
-    border-right: none; /* Sin borde en el lado derecho */
+    border-top: 2px solid white;
+    /* Borde blanco en la parte superior */
+    border-bottom: 2px solid white;
+    /* Borde blanco en la parte inferior */
+    border-left: none;
+    /* Sin borde en el lado izquierdo */
+    border-right: none;
+    /* Sin borde en el lado derecho */
     font-family: 'Bebas Neue', sans-serif;
     flex: 0 0 15%;
     font-size: 60px;
     text-align: center;
     margin-left: auto;
-    display: flex; /* Activa el modelo flexbox */
-    flex-direction: column; /* Coloca los elementos en una columna */
-    align-items: center; /* Centra los elementos horizontalmente */
-    justify-content: center; /* Centra los elementos verticalmente */
-    padding: 10px 0; /* Espaciado interno arriba y abajo */
-    height: 200px; /* Igual altura que .perfil-competidor .profile */
+    display: flex;
+    /* Activa el modelo flexbox */
+    flex-direction: column;
+    /* Coloca los elementos en una columna */
+    align-items: center;
+    /* Centra los elementos horizontalmente */
+    justify-content: center;
+    /* Centra los elementos verticalmente */
+    padding: 10px 0;
+    /* Espaciado interno arriba y abajo */
+    height: 200px;
+    /* Igual altura que .perfil-competidor .profile */
 }
 
 .perfil-competidor .weight small {
@@ -162,4 +177,65 @@
     height: 150px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Título de Resultados de Medallas */
+.perfil-competidor .medallas h2 {
+    color: #a32330; 
+    text-transform: uppercase;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 30px;
+    margin: 50px auto;
+    text-decoration: none; /* Elimina el subrayado */
+}
+
+/* Estilo de la tabla de medallas */
+.tabla-medallas {
+    border: 1px solid rgb(70, 70, 70);
+    width: 50%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    font-size: 16px;
+    font-family: 'Raleway', sans-serif;
+    border-radius: 10px;
+    text-decoration: none; /* Elimina el subrayado */
+}
+
+/* Estilo para las celdas */
+.tabla-medallas th,
+.tabla-medallas td {
+    border: 1px solid #eeeeee;
+    padding: 8px;
+    text-decoration: none; /* Elimina el subrayado del contenido */
+    text-align: center; /* Centra el contenido por defecto */
+}
+
+/* Alinea el nombre de la competición a la izquierda */
+.tabla-medallas td:first-child {
+    text-align: left; /* Alinea solo la primera columna a la izquierda */
+}
+
+/* Estilo para la cabecera */
+.tabla-medallas th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-decoration: none; /* Asegura que no haya subrayado */
+}
+
+/* Alterna colores en las filas */
+.tabla-medallas tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Cambia el color al pasar el ratón */
+.tabla-medallas tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilo para los iconos de las medallas */
+.icono-medalla {
+    width: 30px; /* Ajusta el tamaño de las imágenes */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Centra las imágenes en las celdas */
 }

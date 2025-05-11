@@ -107,51 +107,125 @@ function Carrusel() {
   );
 };
 
-//Ultimas noticias
 function UltimasNoticias() {
-  const noticias = [
-    { tituloNoticias: "Victoria de David Garcia", descripcionNoticias: "Gran desempeño del español Ganando a Denis Vieru en los primeros 10 segundos de combate de IPPON.", imagenNoticias: "./media/torne.jpg" },
-    { tituloNoticias: "Fran Garrigós en Paris 2024", descripcionNoticias: "Fran garrigós rompe la sequia de medallas españolas, después de 26 años, nuestro representante en la categoria -60kg, ha conseguido alzarse con el bronce olímpico!", imagenNoticias: "./media/garrigos.jpg" },
-    { tituloNoticias: "Medallista Gran slam Ai Tsunoda", descripcionNoticias: "Ai Tsunoda, la judoka de 19 años, consigue ganar y alzarse con su primera medalla internacional, alzandose en el ranking olimpico!", imagenNoticias: "./media/ai_tsunoda.jpg" }];
-  //cartas individuales de noticias
-  function CartaNoticia({ tituloNoticias, descripcionNoticias, imagenNoticias }) {
-    return (
-      <div className="carta-noticia">
-        <img className="imagen-noticia" src={imagenNoticias} alt={tituloNoticias} />
-        <div className="contenido-noticia">
-          <h3 className="titulo-noticia">{tituloNoticias}</h3>
-          <p className="descripcion-noticia">{descripcionNoticias}</p>
-          <button className="boton-noticia-completa">
-            <img src="./media/btn-leerNoticiaEntera.png" alt="Ver más" className="icono-boton" />
-          </button>
-        </div>
+  const [noticias, setNoticias] = useState([]);
+
+  useEffect(() => {
+    const { firestore } = initializeFirebase();
+
+    // Recuperar las 3 primeras noticias desde Firestore
+    firestore.collection("noticias")
+      .orderBy("fecha", "desc") // Ordenar por fecha descendente
+      .limit(3) // Limitar a las 3 primeras noticias
+      .get()
+      .then((querySnapshot) => {
+        const noticiasData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setNoticias(noticiasData);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las noticias:", error);
+      });
+  }, []);
+
+  // Componente para una carta de noticia
+  function CartaNoticia({ titulo, info, url }) {
+  return (
+    <div className="carta-noticia">
+      <img
+        className="imagen-noticia"
+        src={url || "./media/default-image.png"} // Imagen por defecto si falta la URL
+        alt={titulo || "Noticia sin título"} // Texto alternativo por defecto
+      />
+      <div className="contenido-noticia">
+        <h3 className="titulo-noticia">{titulo || "Título no disponible"}</h3>
+        <p className="descripcion-noticia">{info || "Descripción no disponible"}</p>
+        <button className="boton-noticia-completa">
+          <img src="./media/btn-leerNoticiaEntera.png" alt="Ver más" className="icono-boton" />
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
   return (
     <div className="ultimas-noticias">
       <h1>Últimas Noticias</h1>
       <div className="noticias">
-        <CartaNoticia
-          tituloNoticias={noticias[0].tituloNoticias}
-          descripcionNoticias={noticias[0].descripcionNoticias}
-          imagenNoticias={noticias[0].imagenNoticias}
-        />
-        <CartaNoticia
-          tituloNoticias={noticias[1].tituloNoticias}
-          descripcionNoticias={noticias[1].descripcionNoticias}
-          imagenNoticias={noticias[1].imagenNoticias}
-        />
-        <CartaNoticia
-          tituloNoticias={noticias[2].tituloNoticias}
-          descripcionNoticias={noticias[2].descripcionNoticias}
-          imagenNoticias={noticias[2].imagenNoticias}
-        />
+        {noticias.map((noticia) => (
+          <CartaNoticia
+            key={noticia.id}
+            titulo={noticia.titulo}
+            info={noticia.info}
+            url={noticia.url}
+          />
+        ))}
       </div>
       <button className="boton-ver-todas-noticias">Leer más</button>
     </div>
-  )
+  );
 }
+
+function ListaNoticias() {
+  const [noticias, setNoticias] = useState([]);
+
+  useEffect(() => {
+    const { firestore } = initializeFirebase();
+
+    // Recuperar todas las noticias desde Firestore
+    firestore.collection("noticias")
+      .orderBy("fecha", "desc") // Ordenar por fecha descendente
+      .get()
+      .then((querySnapshot) => {
+        const noticiasData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setNoticias(noticiasData);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las noticias:", error);
+      });
+  }, []);
+
+  return (
+    <div className="noticias-body">
+      {/* Contenedor azul arriba del todo */}
+      <div className="contenedor-titulo">
+        <h1>NOTICIAS</h1>
+      </div>
+
+      <div className="noticias-container">
+        <h1 className="noticias-titulo-bloque">Últimas Noticias</h1>
+        {noticias.map((noticia) => (
+          <div key={noticia.id} className="noticias-item">
+            <div className="noticias-texto">
+              <h3>{noticia.titulo || "Título no disponible"}</h3>
+              <p className="noticias-meta">
+                {noticia.fecha
+                  ? `Publicado el ${new Date(noticia.fecha.seconds * 1000).toLocaleDateString()}`
+                  : "Fecha no disponible"}
+              </p>
+              <p>{noticia.info || "Descripción no disponible"}</p>
+              <a className="noticias-boton" href="#">Seguir leyendo</a>
+            </div>
+            <div className="noticias-imagen">
+              <img
+                src={noticia.url || "./media/default-image.png"} // Imagen por defecto si falta la URL
+                alt={noticia.titulo || "Noticia sin título"} // Texto alternativo por defecto
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+
 
 //componente apartado Sobre nosotros
 function SobreNosotros() {
@@ -261,10 +335,6 @@ function PerfilCompetidor({ competidor }) {
     }
   };
 
-  // Filtrar las medallas de la competición CEEB
-  const medallasCEEB = competidor.medallas.find((medalla) => medalla.id === "CEEB");
-  const medallasCopasESP = competidor.medallas.find((medalla) => medalla.id === "Copas de España");
-
   return (
     <div className="perfil-competidor">
       <header className="header">
@@ -278,49 +348,40 @@ function PerfilCompetidor({ competidor }) {
               País: {competidor.pais}
             </p>
           </div>
-          <div className="weight">
-            <span>{competidor.peso}</span>
-            <small>{competidor.nombrePeso}</small>
-          </div>
         </div>
-        <nav className="nav">
-          <a href="#" className="active">Medallas</a>
-          <a href="#">Fotos</a>
-        </nav>
       </header>
 
       <main>
         <section className="medallas">
-          <h2>Medallas - Competición CEEB</h2>
-          {medallasCEEB ? (
-            <div className="lista-medallas">
-              <div className="medalla">
-                <h3>CEEB</h3>
-                <p>Oro: {medallasCEEB.oro}</p>
-                <p>Plata: {medallasCEEB.plata}</p>
-                <p>Bronce: {medallasCEEB.bronce}</p>
-              </div>
-            </div>
-          ) : (
-            <p>No se encontraron medallas para la competición CEEB.</p>
-          )}
-
-          <h2>Medallas - Competición COPAS DE ESPAÑA</h2>
-          {medallasCopasESP ? (
-            <div className="lista-medallas">
-              <div className="medalla">
-                <h3>COPAS DE ESPAÑA</h3>
-                <p>Oro: {medallasCopasESP.oro}</p>
-                <p>Plata: {medallasCopasESP.plata}</p>
-                <p>Bronce: {medallasCopasESP.bronce}</p>
-              </div>
-            </div>
-          ) : (
-            <p>No se encontraron medallas para la competición CEEB.</p>
-          )}
+          <h2>Resultados de Medallas</h2>
+          <table className="tabla-medallas">
+            <thead>
+              <tr>
+                <th></th>
+                <th>
+                  <img src="./media/icons/oro.png" alt="Oro" className="icono-medalla" />
+                </th>
+                <th>
+                  <img src="./media/icons/plata.png" alt="Plata" className="icono-medalla" />
+                </th>
+                <th>
+                  <img src="./media/icons/bronce.png" alt="Bronce" className="icono-medalla" />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {competidor.medallas.map((medalla, index) => (
+                <tr key={index}>
+                  <td>{medalla.id}</td>
+                  <td>{medalla.oro || 0}</td>
+                  <td>{medalla.plata || 0}</td>
+                  <td>{medalla.bronce || 0}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
       </main>
-      
     </div>
   );
 }
@@ -616,7 +677,7 @@ function LoginForm({ setPaginaActual }) {
     <div className="register-container">
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Iniciar sesión</h2>
-        {error && <p className="error-msg">{error}</p>} 
+        {error && <p className="error-msg">{error}</p>}
 
         <div className="input-group">
           <label htmlFor="email">Correo electrónico</label>
@@ -751,7 +812,8 @@ function App() {
           </>
         );
       case "noticias":
-        return <UltimasNoticias />;
+        return <ListaNoticias />;
+        
       case "merch":
         return <Tienda agregarProductoAlCarrito={agregarProductoAlCarrito} />;
       case "competidores":

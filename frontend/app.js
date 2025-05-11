@@ -16,12 +16,13 @@ function initializeFirebase() {
   }
 
   return {
-    auth: firebase.auth(), 
+    auth: firebase.auth(),
     firestore: firebase.firestore(),
-    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp, 
+    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp,
   };
 }
 
+// Componente Navbar
 function Navbar({ setPaginaActual, usuario, setCarritoAbierto }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
@@ -39,7 +40,10 @@ function Navbar({ setPaginaActual, usuario, setCarritoAbierto }) {
   return (
     <nav className="navbar">
       <div className="logo">
-        <img src="./media/logo-judo3.png" alt="Club de Judo" />
+        {/* Enlace que redirige a inicio */}
+        <a href="#inicio" onClick={() => setPaginaActual("inicio")}>
+          <img src="./media/logo-judo3.png" alt="Club de Judo" />
+        </a>
       </div>
 
       <div className="menu-buttons">
@@ -132,23 +136,23 @@ function UltimasNoticias() {
 
   // Componente para una carta de noticia
   function CartaNoticia({ titulo, info, url }) {
-  return (
-    <div className="carta-noticia">
-      <img
-        className="imagen-noticia"
-        src={url || "./media/default-image.png"} 
-        alt={titulo || "Noticia sin título"} 
-      />
-      <div className="contenido-noticia">
-        <h3 className="titulo-noticia">{titulo || "Título no disponible"}</h3>
-        <p className="descripcion-noticia">{info || "Descripción no disponible"}</p>
-        <button className="boton-noticia-completa">
-          <img src="./media/btn-leerNoticiaEntera.png" alt="Ver más" className="icono-boton" />
-        </button>
+    return (
+      <div className="carta-noticia">
+        <img
+          className="imagen-noticia"
+          src={url || "./media/default-image.png"} // Imagen por defecto si falta la URL
+          alt={titulo || "Noticia sin título"} // Texto alternativo por defecto
+        />
+        <div className="contenido-noticia">
+          <h3 className="titulo-noticia">{titulo || "Título no disponible"}</h3>
+          <p className="descripcion-noticia">{info || "Descripción no disponible"}</p>
+          <button className="boton-noticia-completa">
+            <img src="./media/btn-leerNoticiaEntera.png" alt="Ver más" className="icono-boton" />
+          </button>
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="ultimas-noticias">
@@ -288,6 +292,23 @@ function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
     setPaginaActual("perfilCompetidor");
   };
 
+  const obtenerBandera = (pais) => {
+    switch (pais) {
+      case "ESP":
+        return "./media/flags/esp.svg";
+      case "PER":
+        return "./media/flags/per.png";
+      case "RD":
+        return "./media/flags/rd.svg";
+      case "USA":
+        return "./media/flags/usa.png";
+      case "ITA":
+        return "./media/flags/ita.png";
+      default:
+        return "./media/flags/default.svg";
+    }
+  };
+
   return (
     <div className={`competidores ${modo === "competidores" ? "padding-top" : ""}`}>
       {modo === "competidores" && (
@@ -310,7 +331,14 @@ function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
               <h2>"{competidor.apodo}"</h2>
               <h1>{competidor.nombre} {competidor.apellido1}</h1>
               <h3>{competidor.apellido2}</h3>
-              <p>{competidor.nacionalidad}</p>
+              <div className="pais-competidor">
+                <img
+                  src={obtenerBandera(competidor.pais)}
+                  alt={`Bandera de ${competidor.pais}`}
+                  className="bandera-pais"
+                />
+                {competidor.pais}
+              </div>
             </div>
           </div>
         ))}
@@ -329,15 +357,17 @@ function PerfilCompetidor({ competidor }) {
   const obtenerBandera = (pais) => {
     switch (pais) {
       case "ESP":
-        return "./media/flags/esp.svg"; 
+        return "./media/flags/esp.svg";
       case "PER":
-        return "./media/flags/per.png"; 
+        return "./media/flags/per.png";
       case "RD":
-        return "./media/flags/rd.svg"; 
+        return "./media/flags/rd.svg";
       case "USA":
-        return "./media/flags/usa.png"; 
+        return "./media/flags/usa.png";
+      case "ITA":
+        return "./media/flags/ita.png";
       default:
-        return "./media/flags/default.svg"; 
+        return "./media/flags/default.svg";
     }
   };
 
@@ -348,7 +378,7 @@ function PerfilCompetidor({ competidor }) {
           <img src={competidor.url} alt={`Foto de ${competidor.nombre}`} />
           <div className="info">
             <h1 className="nombre-completo">{competidor.nombre} {competidor.apellido1} {competidor.apellido2}</h1>
-            <p className="edad">Edad: {competidor.edad} años</p>
+            <p className="edad">{competidor.edad}</p>
             <p className="pais">
               <img src={obtenerBandera(competidor.pais)} alt={`Bandera de ${competidor.pais}`} />
               País: {competidor.pais}
@@ -776,13 +806,13 @@ function App() {
   const [paginaActual, setPaginaActual] = useState("inicio");
   const [competidorSeleccionado, setCompetidorSeleccionado] = useState(null);
   const [usuario, setUsuario] = useState(null);
-  const [carritoAbierto, setCarritoAbierto] = useState(false); 
-  const [productosCarrito, setProductosCarrito] = useState([]); 
+  const [carritoAbierto, setCarritoAbierto] = useState(false);
+  const [productosCarrito, setProductosCarrito] = useState([]);
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
     const { auth, firestore } = initializeFirebase();
-  
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUsuario({
@@ -790,7 +820,7 @@ function App() {
           email: user.email,
           uid: user.uid,
         });
-  
+
         // Recuperar el carrito del usuario desde Firestore
         firestore
           .collection('users')
@@ -807,7 +837,7 @@ function App() {
         setProductosCarrito([]); 
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
 
@@ -821,10 +851,10 @@ function App() {
       const productoExistente = prevProductos.find((p) => p.id === producto.id);
       const nuevoCarrito = productoExistente
         ? prevProductos.map((p) =>
-            p.id === producto.id ? { ...p, cantidad: p.cantidad + 1 } : p
-          )
+          p.id === producto.id ? { ...p, cantidad: p.cantidad + 1 } : p
+        )
         : [...prevProductos, { ...producto, cantidad: 1 }];
-  
+
       // Guardar el carrito actualizado en Firestore
       if (usuario) {
         const { firestore } = initializeFirebase();
@@ -835,7 +865,7 @@ function App() {
           .then(() => console.log('Carrito guardado en Firestore'))
           .catch((error) => console.error('Error al guardar el carrito en Firestore:', error));
       }
-  
+
       return nuevoCarrito;
     });
   };
@@ -843,7 +873,7 @@ function App() {
   const eliminarProducto = (index) => {
     setProductosCarrito((prevProductos) => {
       const nuevoCarrito = prevProductos.filter((_, i) => i !== index);
-  
+
       // Actualizar el carrito en Firestore
       if (usuario) {
         const { firestore } = initializeFirebase();
@@ -854,7 +884,7 @@ function App() {
           .then(() => console.log('Carrito actualizado en Firestore'))
           .catch((error) => console.error('Error al actualizar el carrito en Firestore:', error));
       }
-  
+
       return nuevoCarrito;
     });
   };
@@ -874,7 +904,7 @@ function App() {
         );
       case "noticias":
         return <ListaNoticias />;
-        
+
       case "merch":
         return <Tienda agregarProductoAlCarrito={agregarProductoAlCarrito} />;
       case "competidores":

@@ -16,17 +16,24 @@ function initializeFirebase() {
   }
 
   return {
-    auth: firebase.auth(), // Firebase Authentication
-    firestore: firebase.firestore(), // Firebase Firestore
-    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp, // Timestamp para Firestore
+    auth: firebase.auth(), 
+    firestore: firebase.firestore(),
+    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp, 
   };
 }
 
-function Navbar({ setPaginaActual }) {
+function Navbar({ setPaginaActual, usuario, setCarritoAbierto }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
+  };
+
+  const handleLogout = () => {
+    const { auth } = initializeFirebase();
+    auth.signOut().then(() => {
+      console.log("Usuario cerró sesión");
+    });
   };
 
   return (
@@ -36,18 +43,25 @@ function Navbar({ setPaginaActual }) {
       </div>
 
       <div className="menu-buttons">
-        <label className="menu-button"></label>
-        <button className="menu-button" onClick={() => setPaginaActual("login")}>
-          <img src="./media/register.png" alt="Registro" className="menu-icon" />
-        </button>
-        <button className="menu-button" onClick={() => setPaginaActual("carrito")}>
+        {usuario ? (
+          <div className="usuario-info">
+            <span className="usuario-nombre">Hola, {usuario.displayName || usuario.email}</span>
+            <button className="menu-button" onClick={handleLogout}>
+              <img src="./media/logout-icon.png" alt="Cerrar sesión" className="menu-icon" />
+            </button>
+          </div>
+        ) : (
+          <button className="menu-button" onClick={() => setPaginaActual("login")}>
+            <img src="./media/register.png" alt="Registro" className="menu-icon" />
+          </button>
+        )}
+        <button className="menu-button" onClick={() => setCarritoAbierto(true)}>
           <img src="./media/carrito.png" alt="Carrito" className="menu-icon" />
         </button>
         <button className="menu-button" onClick={toggleMenu}>
           <img src="./media/menu.png" alt="Menú" className="menu-icon" />
         </button>
       </div>
-
 
       <div className={`menu ${menuAbierto ? "menu-abierto" : ""}`}>
         <button className="close-button" onClick={toggleMenu}>✖</button>
@@ -235,15 +249,15 @@ function PerfilCompetidor({ competidor }) {
   const obtenerBandera = (pais) => {
     switch (pais) {
       case "ESP":
-        return "./media/flags/esp.svg"; // Ruta de la bandera de España
+        return "./media/flags/esp.svg"; 
       case "PER":
-        return "./media/flags/per.png"; // Ruta de la bandera de Perú
+        return "./media/flags/per.png"; 
       case "RD":
-        return "./media/flags/rd.svg"; // Ruta de la bandera de República Dominicana
+        return "./media/flags/rd.svg"; 
       case "USA":
-        return "./media/flags/usa.png"; // Ruta de la bandera de Estados Unidos
+        return "./media/flags/usa.png"; 
       default:
-        return "./media/flags/default.svg"; // Ruta de una bandera por defecto (opcional)
+        return "./media/flags/default.svg"; 
     }
   };
 
@@ -336,12 +350,12 @@ function ContactoClub() {
 }
 
   //Componente tienda
-  function Tienda() {
-    const [productos, setProductos] = useState([]); 
+  function Tienda({ agregarProductoAlCarrito }) {
+    const [productos, setProductos] = useState([]);
   
     useEffect(() => {
-      // Recuperar datos desde el backend
-      fetch('http://localhost:3000/productosTienda')
+      // Recuperar datos desde el endpoint
+      fetch('http://localhost:3000/productos')
         .then((response) => {
           if (!response.ok) {
             throw new Error('Error al obtener los datos');
@@ -349,12 +363,12 @@ function ContactoClub() {
           return response.json();
         })
         .then((data) => {
-          setProductos(data); 
+          setProductos(data);
         })
         .catch((error) => {
           console.error('Error al obtener los datos del backend:', error);
         });
-    }, []); 
+    }, []);
   
     return (
       <div className="tienda">
@@ -370,11 +384,16 @@ function ContactoClub() {
         <div className="productos-tienda">
           {productos.map((producto, index) => (
             <div key={index} className="producto-carta">
-              <img src={producto.url} alt={producto.name} className="imagen-producto" />
+              <img src={producto.url} alt={producto.nombre} className="imagen-producto" />
               <div className="producto-detalles">
-                <h3 className="producto-nombre">{producto.name.split('/').pop().replace(/_/g, ' ').replace('.jpg', '')}</h3>
+                <h3 className="producto-nombre">{producto.nombre}</h3>
                 <p className="producto-precio">Precio: ${producto.precio || 'N/A'}</p>
-                <button className="producto-boton">Añadir al carrito</button>
+                <button
+                  className="producto-boton"
+                  onClick={() => agregarProductoAlCarrito(producto)}
+                >
+                  Añadir al carrito
+                </button>
               </div>
             </div>
           ))}
@@ -382,7 +401,7 @@ function ContactoClub() {
       </div>
     );
   }
-  
+
   //Componente Footer
   function Footer() {
     return (
@@ -409,6 +428,82 @@ function ContactoClub() {
   );
 };
 
+function Carrito({ carritoAbierto, setCarritoAbierto, productosCarrito, setProductosCarrito, eliminarProducto, usuario }) {
+  const incrementarCantidad = (index) => {
+    setProductosCarrito((prevProductos) => {
+      const nuevoCarrito = prevProductos.map((producto, i) =>
+        i === index ? { ...producto, cantidad: producto.cantidad + 1 } : producto
+      );
+
+      // Actualizar el carrito en Firestore
+      if (usuario) {
+        const { firestore } = initializeFirebase();
+        firestore
+          .collection('users')
+          .doc(usuario.uid)
+          .set({ carrito: nuevoCarrito }, { merge: true })
+          .then(() => console.log('Cantidad incrementada en Firestore'))
+          .catch((error) => console.error('Error al actualizar la cantidad en Firestore:', error));
+      }
+
+      return nuevoCarrito;
+    });
+  };
+
+  const calcularTotal = () => {
+    return productosCarrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
+  };
+
+  const ProductoEnCarrito = ({ producto, index }) => {
+    return (
+      <div className="carrito-item">
+        <img src={producto.url} alt={producto.name} className="carrito-item-imagen" />
+        <div className="carrito-item-detalles">
+          <h3 className="carrito-item-nombre">{producto.name}</h3>
+          <p className="carrito-item-cantidad">
+            Cantidad: {producto.cantidad}{' '}
+            <button
+              className="incrementar-cantidad"
+              onClick={() => incrementarCantidad(index)}
+            >
+              +
+            </button>
+          </p>
+          <p className="carrito-item-precio">Precio: {producto.precio} €</p>
+        </div>
+        <button className="eliminar-item" onClick={() => eliminarProducto(index)}>
+          Eliminar
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <div className={`carrito ${carritoAbierto ? 'carrito-abierto' : ''}`}>
+      <div className="carrito-header">
+        <h2>Carrito</h2>
+        <button className="cerrar-carrito" onClick={() => setCarritoAbierto(false)}>
+          ✖
+        </button>
+      </div>
+      <div className="carrito-contenido">
+        {productosCarrito.length > 0 ? (
+          productosCarrito.map((producto, index) => (
+            <ProductoEnCarrito key={index} producto={producto} index={index} />
+          ))
+        ) : (
+          <p className="carrito-vacio">El carrito está vacío</p>
+        )}
+      </div>
+      {productosCarrito.length > 0 && (
+        <div className="carrito-total">
+          <h3>Total: {calcularTotal().toFixed(2)} €</h3>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RegisterForm({ setPaginaActual }) {
   const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -427,7 +522,6 @@ function RegisterForm({ setPaginaActual }) {
         return user.updateProfile({
           displayName: username,
         }).then(() => {
-          // Crear un documento en Firestore con los datos del usuario
           return firestore.collection('users').doc(username).set({
             username: username,
             email: user.email,
@@ -501,16 +595,16 @@ function LoginForm({ setPaginaActual }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const auth = initializeFirebase();
+    const { auth } = initializeFirebase();
 
     auth.signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        console.log("Logueado:", userCredential.user);
+        const user = userCredential.user;
 
-        userCredential.user.getIdToken()
-          .then((token) => {
-            console.log("Token JWT:", token);
-          });
+        console.log("Logueado:", user);
+
+        // Redirigir al inicio después de iniciar sesión
+        setPaginaActual("inicio");
       })
       .catch((err) => {
         console.error(err);
@@ -560,6 +654,89 @@ function LoginForm({ setPaginaActual }) {
 function App() {
   const [paginaActual, setPaginaActual] = useState("inicio");
   const [competidorSeleccionado, setCompetidorSeleccionado] = useState(null);
+  const [usuario, setUsuario] = useState(null);
+  const [carritoAbierto, setCarritoAbierto] = useState(false); 
+  const [productosCarrito, setProductosCarrito] = useState([]); 
+  const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    const { auth, firestore } = initializeFirebase();
+  
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUsuario({
+          displayName: user.displayName,
+          email: user.email,
+          uid: user.uid,
+        });
+  
+        // Recuperar el carrito del usuario desde Firestore
+        firestore
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            if (doc.exists && doc.data().carrito) {
+              setProductosCarrito(doc.data().carrito);
+            }
+          })
+          .catch((error) => console.error('Error al recuperar el carrito:', error));
+      } else {
+        setUsuario(null);
+        setProductosCarrito([]); // Limpiar el carrito si no hay usuario
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+
+  const mostrarMensaje = (texto) => {
+    setMensaje(texto);
+    setTimeout(() => setMensaje(""), 3000); // Ocultar el mensaje después de 3 segundos
+  };
+
+  const agregarProductoAlCarrito = (producto) => {
+    setProductosCarrito((prevProductos) => {
+      const productoExistente = prevProductos.find((p) => p.id === producto.id);
+      const nuevoCarrito = productoExistente
+        ? prevProductos.map((p) =>
+            p.id === producto.id ? { ...p, cantidad: p.cantidad + 1 } : p
+          )
+        : [...prevProductos, { ...producto, cantidad: 1 }];
+  
+      // Guardar el carrito actualizado en Firestore
+      if (usuario) {
+        const { firestore } = initializeFirebase();
+        firestore
+          .collection('users')
+          .doc(usuario.uid)
+          .set({ carrito: nuevoCarrito }, { merge: true })
+          .then(() => console.log('Carrito guardado en Firestore'))
+          .catch((error) => console.error('Error al guardar el carrito en Firestore:', error));
+      }
+  
+      return nuevoCarrito;
+    });
+  };
+
+  const eliminarProducto = (index) => {
+    setProductosCarrito((prevProductos) => {
+      const nuevoCarrito = prevProductos.filter((_, i) => i !== index);
+  
+      // Actualizar el carrito en Firestore
+      if (usuario) {
+        const { firestore } = initializeFirebase();
+        firestore
+          .collection('users')
+          .doc(usuario.uid)
+          .set({ carrito: nuevoCarrito }, { merge: true })
+          .then(() => console.log('Carrito actualizado en Firestore'))
+          .catch((error) => console.error('Error al actualizar el carrito en Firestore:', error));
+      }
+  
+      return nuevoCarrito;
+    });
+  };
 
   const renderizarContenido = () => {
     switch (paginaActual) {
@@ -576,7 +753,7 @@ function App() {
       case "noticias":
         return <UltimasNoticias />;
       case "merch":
-        return <Tienda />;
+        return <Tienda agregarProductoAlCarrito={agregarProductoAlCarrito} />;
       case "competidores":
         return (
           <Competidores modo="competidores" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
@@ -596,7 +773,26 @@ function App() {
 
   return (
     <div>
-      <Navbar setPaginaActual={setPaginaActual} />
+      <Navbar
+        setPaginaActual={setPaginaActual}
+        usuario={usuario}
+        setCarritoAbierto={(abierto) => {
+          if (usuario) {
+            setCarritoAbierto(abierto);
+          } else {
+            mostrarMensaje("Debes iniciar sesión para usar el carrito.");
+          }
+        }}
+      />
+      <Carrito
+        carritoAbierto={carritoAbierto}
+        setCarritoAbierto={setCarritoAbierto}
+        productosCarrito={productosCarrito}
+        setProductosCarrito={setProductosCarrito}
+        eliminarProducto={eliminarProducto}
+        usuario={usuario}
+      />
+      {mensaje && <div className="notificacion">{mensaje}</div>}
       <div>{renderizarContenido()}</div>
       <Footer />
     </div>

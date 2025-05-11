@@ -66,6 +66,7 @@
     .menu-buttons {
     display: flex;
     gap: 20px; 
+    
   }
   
     
@@ -162,3 +163,20 @@
     height: 40px; 
     width: auto; 
   }
+
+  
+  .usuario-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+  }
+
+
+  .usuario-nombre {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    color: #f0eee5;
+    text-transform: uppercase;
+  }
+
+ 

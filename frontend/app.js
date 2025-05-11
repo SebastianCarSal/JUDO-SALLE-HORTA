@@ -15,7 +15,11 @@ function initializeFirebase() {
     firebase.initializeApp(firebaseConfig);
   }
 
-  return firebase.auth();
+  return {
+    auth: firebase.auth(), // Firebase Authentication
+    firestore: firebase.firestore(), // Firebase Firestore
+    serverTimestamp: firebase.firestore.FieldValue.serverTimestamp, // Timestamp para Firestore
+  };
 }
 
 function Navbar({ setPaginaActual }) {
@@ -32,7 +36,7 @@ function Navbar({ setPaginaActual }) {
       </div>
 
       <div className="menu-buttons">
-        <button className="menu-button" onClick={() => setPaginaActual("register")}>
+        <button className="menu-button" onClick={() => setPaginaActual("login")}>
           <img src="./media/register.png" alt="Registro" className="menu-icon" />
         </button>
         <button className="menu-button" onClick={() => setPaginaActual("carrito")}>
@@ -404,7 +408,6 @@ function ContactoClub() {
   );
 };
 
-//COMPONENTE REGITSER
 function RegisterForm({ setPaginaActual }) {
   const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -413,19 +416,29 @@ function RegisterForm({ setPaginaActual }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const auth = initializeFirebase(); // obtenés la instancia aquí
+    const { auth, firestore, serverTimestamp } = initializeFirebase();
 
     auth.createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        return userCredential.user.updateProfile({
-          displayName: username
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        // Actualizar el perfil del usuario con el nombre de usuario
+        return user.updateProfile({
+          displayName: username,
+        }).then(() => {
+          // Crear un documento en Firestore con los datos del usuario
+          return firestore.collection('users').doc(username).set({
+            username: username,
+            email: user.email,
+            createdAt: serverTimestamp(),
+          });
         });
       })
       .then(() => {
-        console.log("Usuario registrado");
+        console.log("Usuario registrado y documento creado en Firestore");
         setPaginaActual("login");
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setError(err.message);
       });
@@ -477,7 +490,7 @@ function RegisterForm({ setPaginaActual }) {
       </form>
     </div>
   );
-};
+}
 
 //COMPONENTE LOGIN
 function LoginForm({ setPaginaActual }) {
@@ -505,8 +518,8 @@ function LoginForm({ setPaginaActual }) {
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+    <div className="register-container">
+      <form className="register-form" onSubmit={handleSubmit}>
         <h2>Iniciar sesión</h2>
         {error && <p className="error-msg">{error}</p>} 
 
@@ -534,16 +547,13 @@ function LoginForm({ setPaginaActual }) {
 
         <button type="submit" className="submit-btn">Iniciar sesión</button>
 
-        <p className="register-link">
+        <p className="login-link">
           ¿No tienes cuenta? <a onClick={() => setPaginaActual("register")}>Regístrate aquí</a>
         </p>
       </form>
     </div>
   );
 }
-
-
-
 
 //Componente principal de la aplicación
 function App() {
@@ -562,12 +572,22 @@ function App() {
             <ContactoClub />
           </>
         );
+      case "noticias":
+        return <UltimasNoticias />;
+      case "merch":
+        return <Tienda />;
       case "competidores":
         return (
           <Competidores modo="competidores" setPaginaActual={setPaginaActual} setCompetidorSeleccionado={setCompetidorSeleccionado} />
         );
+      case "nosotros":
+        return <SobreNosotros />;
       case "perfilCompetidor":
         return <PerfilCompetidor competidor={competidorSeleccionado} />;
+      case "register":
+        return <RegisterForm setPaginaActual={setPaginaActual} />;
+      case "login":
+        return <LoginForm setPaginaActual={setPaginaActual} />;
       default:
         return <h1>Página no encontrada</h1>;
     }

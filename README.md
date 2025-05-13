@@ -157,7 +157,3 @@ Se ha implementado un sistema de autenticación con **Firebase Authentication**,
 - Incluye Firebase Admin SDK en el backend para acceder a Firestore de forma segura.
 
 ---
-
-## 📷 Capturas (opcional)
-
-Puedes incluir aquí capturas de pantalla del sitio web, tanto del frontend como del backend si usas una herramienta como Postman.

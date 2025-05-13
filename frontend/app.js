@@ -86,7 +86,7 @@ function Navbar({ setPaginaActual, usuario, setCarritoAbierto }) {
 
 //carrusel de imagenes
 function Carrusel() {
-  const imagenes = ["media/carr1.jpg", "media/ono.jpg", "media/rinner.jpg"];
+  const imagenes = ["media/carru1.jpg", "media/carru2.jpg", "media/carru3.jpg"];
 
   const [actual, setActual] = useState(0);
 
@@ -117,7 +117,7 @@ function UltimasNoticias() {
   useEffect(() => {
     const { firestore } = initializeFirebase();
 
-    // Recuperar las 3 primeras noticias desde Firestore
+    // Recupera las 3 primeras noticias desde Firestore
     firestore.collection("noticias")
       .orderBy("fecha", "desc") 
       .limit(3) 
@@ -140,8 +140,8 @@ function UltimasNoticias() {
       <div className="carta-noticia">
         <img
           className="imagen-noticia"
-          src={url || "./media/default-image.png"} // Imagen por defecto si falta la URL
-          alt={titulo || "Noticia sin título"} // Texto alternativo por defecto
+          src={url || "./media/default-image.png"} 
+          alt={titulo || "Noticia sin título"} 
         />
         <div className="contenido-noticia">
           <h3 className="titulo-noticia">{titulo || "Título no disponible"}</h3>
@@ -167,7 +167,6 @@ function UltimasNoticias() {
           />
         ))}
       </div>
-      <button className="boton-ver-todas-noticias">Leer más</button>
     </div>
   );
 }
@@ -212,9 +211,7 @@ function ListaNoticias() {
                 {`Publicado el ${noticia.fecha || "Fecha no disponible"}`}
               </p>
               <p>{noticia.info || "Descripción no disponible"}</p>
-              <a className="noticias-boton" href="#">
-                Seguir leyendo
-              </a>
+
             </div>
             <div className="noticias-imagen">
               <img
@@ -254,11 +251,13 @@ function SobreNosotros() {
         </div>
         <div className="texto2-sobre-nosotros">
           <h3>Historia del club</h3>
-          <p>Aquí resumidamente algo de la historia del club... invitando que vayan a la pagina de sobre nosotros para acabar de ver en sí la historia del club!!</p>
-          <p>Aquí resumidamente algo de la historia del club... invitando que vayan a la pagina de sobre nosotros para acabar de ver en sí la historia del club Aquí resumidamente algo de la historia del club... invitando que vayan a la pagina de sobre nosotros para acabar de ver en sí la historia del club.</p>
+            <p>El Club Judo Nou BCN nació con el objetivo de acercar el judo a personas</p>
+            <p>de todas las edades en Barcelona. Destacado por su enfoque inclusivo y formativo,</p>
+            <p>el club combina la enseñanza técnica con los valores tradicionales del judo,</p> 
+            <p>impulsando tanto la iniciación como la competición a nivel local y nacional.</p>
         </div>
         <div className="imagenes2-sobre-nosotros">
-          <img src="./media/image4.png" />
+          <img src="./media/nueva_image.jpg" />
         </div>
       </div>
     </div>
@@ -303,7 +302,7 @@ function Competidores({ modo, setPaginaActual, setCompetidorSeleccionado }) {
       case "USA":
         return "./media/flags/usa.png";
       case "ITA":
-        return "./media/flags/ita.png";
+        return "./media/flags/ita.svg";
       default:
         return "./media/flags/default.svg";
     }
@@ -365,7 +364,7 @@ function PerfilCompetidor({ competidor }) {
       case "USA":
         return "./media/flags/usa.png";
       case "ITA":
-        return "./media/flags/ita.png";
+        return "./media/flags/ita.svg";
       default:
         return "./media/flags/default.svg";
     }
